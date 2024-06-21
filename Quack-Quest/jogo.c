@@ -2,19 +2,22 @@
 
 //------------------------------------------------------------------------------------
 Texture2D pato;
+//Texture2D cacador;
+//Texture2D ovo;
+//Texture2D pedra;
 //------------------------------------------------------------------------------------
-int main(void)
+int main()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 1280;
     const int screenHeight = 720;
 
-    pato = LoadTexture("texture/pato.png");
-
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
-    Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
+    pato = LoadTexture("texture/pato.png");
+
+    Vector2 cord = { (float)screenWidth/2, (float)screenHeight/2 };
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -24,13 +27,15 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        if (IsKeyDown(KEY_D)) ballPosition.x += 2.0f;
-        if (IsKeyDown(KEY_A)) ballPosition.x -= 2.0f;
-        if (IsKeyDown(KEY_W)) ballPosition.y -= 2.0f;
-        if (IsKeyDown(KEY_S)) ballPosition.y += 2.0f;
+        if (IsKeyDown(KEY_D)) cord.x += 2.5f;
+        if (IsKeyDown(KEY_A)) cord.x -= 2.5f;
+        if (IsKeyDown(KEY_W)) cord.y -= 2.5f;
+        if (IsKeyDown(KEY_S)) cord.y += 2.5f;
 
         
         //----------------------------------------------------------------------------------
+
+        //sistema de colisão
 
         // Draw
         //----------------------------------------------------------------------------------
@@ -39,9 +44,10 @@ int main(void)
 
             ClearBackground(RAYWHITE);
 
-            DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
+            //DrawTexture(pato, cord.x, cord.y, WHITE); //imagem do pato
+            DrawTextureEx(pato,(Vector2){cord.x, cord.y}, 0.0, 0.07, WHITE); //tamn img do pato
 
-            DrawTexture(pato, ballPosition.x, ballPosition.y, WHITE);
+            DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
