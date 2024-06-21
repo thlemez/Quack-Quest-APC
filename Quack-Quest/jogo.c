@@ -1,7 +1,7 @@
 #include "include/raylib.h"
 
 //------------------------------------------------------------------------------------
-// Program main entry point
+Texture2D pato;
 //------------------------------------------------------------------------------------
 int main(void)
 {
@@ -9,6 +9,8 @@ int main(void)
     //--------------------------------------------------------------------------------------
     const int screenWidth = 1280;
     const int screenHeight = 720;
+
+    pato = LoadTexture("texture/pato.png");
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
@@ -22,21 +24,24 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        if (IsKeyDown(KEY_RIGHT)) ballPosition.x += 2.0f;
-        if (IsKeyDown(KEY_LEFT)) ballPosition.x -= 2.0f;
-        if (IsKeyDown(KEY_UP)) ballPosition.y -= 2.0f;
-        if (IsKeyDown(KEY_DOWN)) ballPosition.y += 2.0f;
+        if (IsKeyDown(KEY_D)) ballPosition.x += 2.0f;
+        if (IsKeyDown(KEY_A)) ballPosition.x -= 2.0f;
+        if (IsKeyDown(KEY_W)) ballPosition.y -= 2.0f;
+        if (IsKeyDown(KEY_S)) ballPosition.y += 2.0f;
+
+        
         //----------------------------------------------------------------------------------
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
+
             ClearBackground(RAYWHITE);
 
-            DrawText("Mova o pato", 10, 100, 20, LIGHTGRAY);
+            DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
 
-            DrawCircleV(ballPosition, 50, MAROON);
+            DrawTexture(pato, ballPosition.x, ballPosition.y, WHITE);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
