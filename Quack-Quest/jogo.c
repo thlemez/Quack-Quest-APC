@@ -1,31 +1,40 @@
 #include "include/raylib.h"
 
 //------------------------------------------------------------------------------------
-Texture2D pato;
-//Texture2D cacador;
-//Texture2D ovo;
-//Texture2D pedra;
+Texture2D lago; //declarar lago
+Texture2D pato; //declarar pato
+Texture2D cacador; //declarar caçador
+Texture2D ovo; //declarar ovo
+Texture2D pedra; //declarar pedra
 //------------------------------------------------------------------------------------
 int main()
-{
-    // Initialization
+
+    // Inicialização
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
+    const int screenWidth = 1280; //largura em pixels
+    const int screenHeight = 720; //altura em pixels
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window"); //abrir janela
 
-    pato = LoadTexture("texture/pato.png");
+    lago = LoadTexture("texture/lago.png"); //linkar img lago
 
-    Vector2 cord = { (float)screenWidth/2, (float)screenHeight/2 };
+    pato = LoadTexture("texture/pato.png"); //linkar img pato
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    cacador = LoadTexture("texture/cacador.png"); //linkar img caçador
+
+    ovo = LoadTexture("texture/ovo.png"); //linkar img ovo
+
+    pedra = LoadTexture("texture/pedra.png"); //linkar img pedra
+
+    Vector2 cord = { (float)screenWidth/2, (float)screenHeight/2 }; 
+
+    SetTargetFPS(60);               //quadros por segundo (FPS)
     //--------------------------------------------------------------------------------------
 
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    //loop jogo
+    while (!WindowShouldClose())    // Detectar fechar janela ou esc
     {
-        // Update
+        //Atualização
         //----------------------------------------------------------------------------------
         if (IsKeyDown(KEY_D)) cord.x += 2.5f;
         if (IsKeyDown(KEY_A)) cord.x -= 2.5f;
@@ -44,18 +53,19 @@ int main()
 
             ClearBackground(RAYWHITE);
 
-            //DrawTexture(pato, cord.x, cord.y, WHITE); //imagem do pato
+            DrawTexture(lago, 0, 0, WHITE);
+
             DrawTextureEx(pato,(Vector2){cord.x, cord.y}, 0.0, 0.07, WHITE); //tamn img do pato
 
-            DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
+            //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
 
-    // De-Initialization
+    //Unload
     //--------------------------------------------------------------------------------------
-    CloseWindow();        // Close window and OpenGL context
+    CloseWindow();        //fechar janela
     //--------------------------------------------------------------------------------------
 
     return 0;
