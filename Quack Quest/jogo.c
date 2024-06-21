@@ -22,10 +22,10 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        if (IsKeyDown(D)) ballPosition.x += 2.0f;
-        if (IsKeyDown(A)) ballPosition.x -= 2.0f;
-        if (IsKeyDown(W)) ballPosition.y -= 2.0f;
-        if (IsKeyDown(S)) ballPosition.y += 2.0f;
+        if (IsKeyDown(KEY_RIGHT)) ballPosition.x += 2.0f;
+        if (IsKeyDown(KEY_LEFT)) ballPosition.x -= 2.0f;
+        if (IsKeyDown(KEY_UP)) ballPosition.y -= 2.0f;
+        if (IsKeyDown(KEY_DOWN)) ballPosition.y += 2.0f;
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -34,7 +34,7 @@ int main(void)
 
             ClearBackground(RAYWHITE);
 
-            DrawText("Mova o pato", 10, 10, 20, LIGHTGRAY);
+            DrawText("Mova o pato", 10, 100, 20, LIGHTGRAY);
 
             DrawCircleV(ballPosition, 50, MAROON);
 
