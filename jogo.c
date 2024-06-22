@@ -82,10 +82,10 @@ int main()
         if(cord.y < -50) cord.y = screenHeight;
         
         //----------------------------------------------------------------------------------
-        if (IsKeyDown(KEY_D)) cord.x += 1.5f;
-        if (IsKeyDown(KEY_A)) cord.x -= 1.5f;
-        if (IsKeyDown(KEY_W)) cord.y -= 1.5f;
-        if (IsKeyDown(KEY_S)) cord.y += 1.5f;
+        if (IsKeyDown(KEY_D)) cord.x += 1.0f;
+        if (IsKeyDown(KEY_A)) cord.x -= 1.0f;
+        if (IsKeyDown(KEY_W)) cord.y -= 1.0f;
+        if (IsKeyDown(KEY_S)) cord.y += 1.0f;
 
         
         //----------------------------------------------------------------------------------
