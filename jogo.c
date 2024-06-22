@@ -68,10 +68,10 @@ int main()
             baixo = true;
         }
 
-        if(direita == true)cord.x += 2.5f;
-        if(esquerda == true)cord.x -= 2.5f;
-        if(cima == true)cord.y -= 2.5f;
-        if(baixo == true)cord.y += 2.5f;
+        if(direita == true)cord.x += 1.5f;
+        if(esquerda == true)cord.x -= 1.5f;
+        if(cima == true)cord.y -= 1.5f;
+        if(baixo == true)cord.y += 1.5f;
         //----------------------------------------------------------------------------------
 
         //verificar se o pato saiu da janela e ent teletransportar ele pro outro lado
