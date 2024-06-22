@@ -10,6 +10,11 @@ Texture2D pedra; //declarar pedra
 int main()
 {
 
+    bool cima = true;
+    bool baixo = false;
+    bool direita = false;
+    bool esquerda = false;
+
     // Inicialização
     //--------------------------------------------------------------------------------------
     const int screenWidth = 1280; //largura em pixels
@@ -35,7 +40,47 @@ int main()
     //loop jogo
     while (!WindowShouldClose())    // Detectar fechar janela ou esc
     {
-        //Atualização
+
+        //para o pato continuar a andar em uma posição até que mude de direção
+
+        if (IsKeyDown(KEY_D)){ 
+            direita = true;
+            cima = false;
+            esquerda = false;
+            baixo = false;
+        } 
+        if (IsKeyDown(KEY_A)){ 
+            direita = false;
+            cima = false;
+            esquerda = true;
+            baixo = false;
+        }
+        if (IsKeyDown(KEY_W)){ 
+            direita = false;
+            cima = true;
+            esquerda = false;
+            baixo = false;
+        }
+        if (IsKeyDown(KEY_S)){
+            direita = false;
+            cima = false;
+            esquerda = false;
+            baixo = true;
+        }
+
+        if(direita == true)cord.x += 2.5f;
+        if(esquerda == true)cord.x -= 2.5f;
+        if(cima == true)cord.y -= 2.5f;
+        if(baixo == true)cord.y += 2.5f;
+        //----------------------------------------------------------------------------------
+
+        //verificar se o pato saiu da janela e ent teletransportar ele pro outro lado
+
+        if(cord.x > screenWidth + 50) cord.x = 0;
+        if(cord.x < -50) cord.x = screenWidth;
+        if(cord.y > screenHeight + 50) cord.y = 0;
+        if(cord.y < -50) cord.y = screenHeight;
+        
         //----------------------------------------------------------------------------------
         if (IsKeyDown(KEY_D)) cord.x += 2.5f;
         if (IsKeyDown(KEY_A)) cord.x -= 2.5f;
