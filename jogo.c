@@ -26,7 +26,7 @@ int main()
 
     pato = LoadTexture("texture/pato.png"); //linkar img pato
 
-    cacador = LoadTexture("texture/cacador.png"); //linkar img caçador
+    cacador = LoadTexture("texture/caçadorpng.png"); //linkar img caçador
 
     ovo = LoadTexture("texture/ovo.png"); //linkar img ovo
 
@@ -102,6 +102,8 @@ int main()
             DrawTexture(lago, 0, 0, WHITE);
 
             DrawTextureEx(pato,(Vector2){cord.x, cord.y}, 0.0, 0.07, WHITE); //tamn img do pato
+
+            DrawTextureEx(cacador,(Vector2){cord.x, cord.y}, 0.0, 0.07, WHITE);
 
             //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
 
