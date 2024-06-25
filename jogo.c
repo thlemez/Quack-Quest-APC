@@ -68,10 +68,10 @@ int main()
             baixo = true;
         }
 
-        if(direita == true)cord.x += 1.0f;
-        if(esquerda == true)cord.x -= 1.0f;
-        if(cima == true)cord.y -= 1.0f;
-        if(baixo == true)cord.y += 1.0f;
+        if(direita == true)cord.x += 1.2f;
+        if(esquerda == true)cord.x -= 1.2f;
+        if(cima == true)cord.y -= 1.2f;
+        if(baixo == true)cord.y += 1.2f;
         //----------------------------------------------------------------------------------
 
         //verificar se o pato saiu da janela e ent teletransportar ele pro outro lado
@@ -82,10 +82,10 @@ int main()
         if(cord.y < -50) cord.y = screenHeight;
         
         //----------------------------------------------------------------------------------
-        if (IsKeyDown(KEY_D)) cord.x += 1.0f;
-        if (IsKeyDown(KEY_A)) cord.x -= 1.0f;
-        if (IsKeyDown(KEY_W)) cord.y -= 1.0f;
-        if (IsKeyDown(KEY_S)) cord.y += 1.0f;
+        if (IsKeyDown(KEY_D)) cord.x += 0.0f;
+        if (IsKeyDown(KEY_A)) cord.x -= 0.0f;
+        if (IsKeyDown(KEY_W)) cord.y -= 0.0f;
+        if (IsKeyDown(KEY_S)) cord.y += 0.0f;
 
         
         //----------------------------------------------------------------------------------
@@ -101,9 +101,9 @@ int main()
 
             DrawTexture(lago, 0, 0, WHITE);
 
-            DrawTextureEx(pato,(Vector2){cord.x, cord.y}, 0.0, 0.07, WHITE); //tamn img do pato
+            DrawTextureEx(pato,(Vector2){cord.x, cord.y}, 0.0, 0.06, WHITE); //tamn img do pato
 
-            DrawTextureEx(cacador,(Vector2){0, 0}, 0.0, 0.09, WHITE); //tamn 
+            DrawTextureEx(cacador,(Vector2){0, 0}, 0.0, 0.08, WHITE); //tamn 
 
             //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
 
