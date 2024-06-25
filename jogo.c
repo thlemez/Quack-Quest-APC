@@ -103,7 +103,7 @@ int main()
 
             DrawTextureEx(pato,(Vector2){cord.x, cord.y}, 0.0, 0.07, WHITE); //tamn img do pato
 
-            DrawTextureEx(cacador,(Vector2){cord.x, cord.y}, 0.0, 0.07, WHITE); //tamn 
+            DrawTextureEx(cacador,(Vector2){0, 0}, 0.0, 0.09, WHITE); //tamn 
 
             //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
 
