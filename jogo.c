@@ -32,7 +32,9 @@ int main()
 
     pedra = LoadTexture("texture/pedra.png"); //linkar img pedra
 
-    Vector2 cord = { (float)screenWidth/2, (float)screenHeight/2 }; 
+    Vector2 cord1 = {0,-4}; //valor inicial x e y do patinho
+
+    Vector2 cord2 = {0, 0}; //valor inicial x e y do caçador
 
     SetTargetFPS(60);               //quadros por segundo (FPS)
     //--------------------------------------------------------------------------------------
@@ -68,25 +70,72 @@ int main()
             baixo = true;
         }
 
-        if(direita == true)cord.x += 1.2f;
-        if(esquerda == true)cord.x -= 1.2f;
-        if(cima == true)cord.y -= 1.2f;
-        if(baixo == true)cord.y += 1.2f;
+        if(direita == true)cord1.x += 1.2f;
+        if(esquerda == true)cord1.x -= 1.2f;
+        if(cima == true)cord1.y -= 1.2f;
+        if(baixo == true)cord1.y += 1.2f;
         //----------------------------------------------------------------------------------
 
         //verificar se o pato saiu da janela e ent teletransportar ele pro outro lado
 
-        if(cord.x > screenWidth + 50) cord.x = 0;
-        if(cord.x < -50) cord.x = screenWidth;
-        if(cord.y > screenHeight + 50) cord.y = 0;
-        if(cord.y < -50) cord.y = screenHeight;
+        if(cord1.x > screenWidth + 50) cord1.x = 0;
+        if(cord1.x < -50) cord1.x = screenWidth;
+        if(cord1.y > screenHeight + 50) cord1.y = 0;
+        if(cord1.y < -50) cord1.y = screenHeight;
         
         //----------------------------------------------------------------------------------
-        if (IsKeyDown(KEY_D)) cord.x += 0.0f;
-        if (IsKeyDown(KEY_A)) cord.x -= 0.0f;
-        if (IsKeyDown(KEY_W)) cord.y -= 0.0f;
-        if (IsKeyDown(KEY_S)) cord.y += 0.0f;
+        /*
+        if (IsKeyDown(KEY_D)) cord1.x += 0.0f;
+        if (IsKeyDown(KEY_A)) cord1.x -= 0.0f;
+        if (IsKeyDown(KEY_W)) cord1.y -= 0.0f;
+        if (IsKeyDown(KEY_S)) cord1.y += 0.0f;
+        //pato andar
+        */
+        if (IsKeyDown(KEY_RIGHT)){ 
+            direita = true;
+            cima = false;
+            esquerda = false;
+            baixo = false;
+        } 
+        if (IsKeyDown(KEY_LEFT)){ 
+            direita = false;
+            cima = false;
+            esquerda = true;
+            baixo = false;
+        }
+        if (IsKeyDown(KEY_UP)){ 
+            direita = false;
+            cima = true;
+            esquerda = false;
+            baixo = false;
+        }
+        if (IsKeyDown(KEY_DOWN)){
+            direita = false;
+            cima = false;
+            esquerda = false;
+            baixo = true;
+        }
 
+        if(direita == true)cord2.x += 1.2f;
+        if(esquerda == true)cord2.x -= 1.2f;
+        if(cima == true)cord2.y -= 1.2f;
+        if(baixo == true)cord2.y += 1.2f;
+        //----------------------------------------------------------------------------------
+
+        //verificar se o pato saiu da janela e ent teletransportar ele pro outro lado
+
+        if(cord2.x > screenWidth + 50) cord2.x = 0;
+        if(cord2.x < -50) cord2.x = screenWidth;
+        if(cord2.y > screenHeight + 50) cord2.y = 0;
+        if(cord2.y < -50) cord2.y = screenHeight;
+        
+        /*
+        if (IsKeyDown(KEY_RIGHT)) cord2.x += 2.0f;
+        if (IsKeyDown(KEY_LEFT)) cord2.x -= 2.0f;
+        if (IsKeyDown(KEY_UP)) cord2.y -= 2.0f;
+        if (IsKeyDown(KEY_DOWN)) cord2.y += 2.0f; 
+        caçador andar//
+        */
         
         //----------------------------------------------------------------------------------
 
@@ -101,9 +150,9 @@ int main()
 
             DrawTexture(lago, 0, 0, WHITE);
 
-            DrawTextureEx(pato,(Vector2){cord.x, cord.y}, 0.0, 0.06, WHITE); //tamn img do pato
+            DrawTextureEx(pato,(Vector2){cord1.x, cord1.y}, 0.0, 0.06, WHITE); //tamn img do pato
 
-            DrawTextureEx(cacador,(Vector2){0, 0}, 0.0, 0.08, WHITE); //tamn 
+            DrawTextureEx(cacador,(Vector2){cord2.x, cord2.y}, 0.0, 0.08, WHITE); //tamn 
 
             //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
 
