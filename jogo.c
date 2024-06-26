@@ -309,7 +309,7 @@ int main()
         //Vitória
 
             if (PatoComOvo && score >= numOvos * 100){
-                GanhouJogo = True;
+                GanhouJogo = true;
                 PlaySound(soundwin);
             }
 
