@@ -166,21 +166,21 @@ int main()
             float patoWidth = pato.width * 0.06f;
             float patoHeight = pato.height * 0.06f;
             float pedraWidth = pedra.width * 0.08f;
-            float pedraheight = pedra.height * 0.08f;
+            float pedraHeight = pedra.height * 0.08f;
 
             // Determinar as posições do pato e pedra de todas as direções
 
                 //pato
                 float patoLeft = NewPos.x;
-                float patoRight = NewPos.x + pato.width;
+                float patoRight = NewPos.x + patoWidth;
                 float patoUp = NewPos.y;
-                float patoDown = NewPos.y + pato.height;
+                float patoDown = NewPos.y + patoHeight;
 
                 //pedra
                 float pedraLeft = posicao_pedra[i].x;
-                float pedraRight = posicao_pedra[i].x + pedra.width;
+                float pedraRight = posicao_pedra[i].x + pedraWidth;
                 float pedraUp = posicao_pedra[i].y;
-                float pedraDown = posicao_pedra[i].y + pedra.height;
+                float pedraDown = posicao_pedra[i].y + pedraHeight;
 
             // Verificar se as caixas colidem e igualar "colission" como True
             
