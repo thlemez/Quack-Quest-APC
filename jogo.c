@@ -12,6 +12,9 @@ Texture2D victory; //declarar victory
 int main()
 {
 
+//------------------------------------------------------------------------------------
+//Direções de movimento do pato e do caçador
+
     bool cima = true;
     bool baixo = false;
     bool direita = false;
@@ -62,16 +65,16 @@ int main()
     //pedras
 
             // Definição do tamanho da grade
-            const int gridSizeX = 20;
-            const int gridSizeY = 20;
+            const int gradeSizeX = 20;
+            const int gradeSizeY = 20;
 
             // Criação e inicialização da grade
-            bool grade[gridSizeX][gridSizeY];
+            bool grade[gradeSizeX][gradeSizeY];
 
             // Inicialização da grade com obstáculos em forma de labirinto
-            for (int x = 0; x < gridSizeX; x++) {
-                for (int y = 0; y < gridSizeY; y++) {
-                    if (x == 0 || x == gridSizeX - 1 || y == 0 || y == gridSizeY - 1) {
+            for (int x = 0; x < gradeSizeX; x++) {
+                for (int y = 0; y < gradeSizeY; y++) {
+                    if (x == 0 || x == gradeSizeX - 1 || y == 0 || y == gradeSizeY - 1) {
                         grade[x][y] = true; // borda do labirinto
                     } else if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) {
                         grade[x][y] = true; // pedras em forma de labirinto
@@ -357,8 +360,8 @@ int main()
             //----------------------------------------------------------------------------------
             // Desenho da grade
 
-            for (int x = 0; x < gridSizeX; x++) {
-                for (int y = 0; y < gridSizeY; y++) {
+            for (int x = 0; x < gradeSizeX; x++) {
+                for (int y = 0; y < gradeSizeY; y++) {
                     if (grade[x][y]) {
                         DrawTextureEx(pedra, (Vector2){x * 20, y * 20}, 0.0, 1.0, WHITE);
                             // Desenha a textura da pedra na posição correspondente na grade
