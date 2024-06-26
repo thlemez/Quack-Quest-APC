@@ -163,10 +163,10 @@ int main()
         for (int i = 0; i < 100; i++){
             
             // Calcular caixas delimitadoras para pato e pedra
-            float patoWidth = pato.width * 0.06f;
-            float patoHeight = pato.height * 0.06f;
-            float pedraWidth = pedra.width * 0.08f;
-            float pedraHeight = pedra.height * 0.08f;
+            float patoWidth = patoWidth * 0.06f;
+            float patoHeight = patoHeight * 0.06f;
+            float pedraWidth = pedraWidth * 0.08f;
+            float pedraHeight = pedraHeight * 0.08f;
 
             // Determinar as posições do pato e pedra de todas as direções
 
