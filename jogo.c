@@ -49,6 +49,57 @@ int main()
     
     Vector2 posicao_pedra[100]; 
 
+    /*
+    // Inicialização das posições das pedras
+        for (int i = 0; i < 100 ; i++) {
+            posicao_pedra[i] = (Vector2) {
+                GetRandomValue(0, screenWidth),
+                GetRandomValue(0, screenHeight)
+            };
+        }
+    */  // Nao é mais necessario!
+
+    //pedras
+
+            // Definição do tamanho da grade
+            const int gridSizeX = 20;
+            const int gridSizeY = 20;
+
+            // Criação e inicialização da grade
+            bool grade[gridSizeX][gridSizeY];
+
+            // Inicialização da grade com obstáculos em forma de labirinto
+            for (int x = 0; x < gridSizeX; x++) {
+                for (int y = 0; y < gridSizeY; y++) {
+                    if (x == 0 || x == gridSizeX - 1 || y == 0 || y == gridSizeY - 1) {
+                        grade[x][y] = true; // borda do labirinto
+                    } else if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) {
+                        grade[x][y] = true; // pedras em forma de labirinto
+                    } else {
+                        grade[x][y] = false; // espaço vazio
+                    }
+                }
+            }
+
+    //--------------------------------------------------------------------------------------
+    //Inicialização dos Ovos
+
+    const int numOvos = 30;
+    Vector2 ovos[numOvos];
+
+        for( int i = 0; i < numOvos; i++){
+            ovos[i] = (Vector2)
+            {
+                GetRandomValue(0, screenWidth - ovo.width),     // Posição x aleatória dentro da largura da janela descontando o tamanho do ovo
+                GetRandomValue(0, screenHeight - ovo.height)    // Posição y aleatória dentro da altura da janela descontando o tamanho do ovo
+            };
+        }
+
+    int Score = 0; //Pontuação inicial
+    int Highscore = 0; //Maior Pontuação Atingida
+    bool GanhouJogo = false; //variável de vitória
+
+
 
     SetTargetFPS(60);               //quadros por segundo (FPS)
     //--------------------------------------------------------------------------------------
@@ -106,7 +157,7 @@ int main()
         
         bool collision = false; // inicializar colisão como falso
 
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 100; i++){
             
             // Calcular caixas delimitadoras para pato e pedra
             float patoWidth = pato.width * 0.06f;
@@ -151,8 +202,13 @@ int main()
         if (IsKeyDown(KEY_A)) cord1.x -= 0.0f;
         if (IsKeyDown(KEY_W)) cord1.y -= 0.0f;
         if (IsKeyDown(KEY_S)) cord1.y += 0.0f;
+        
         //pato andar
         */
+
+        //----------------------------------------------------------------------------------
+        //Cacador andar
+
         if (IsKeyDown(KEY_RIGHT)){ 
             direita = true;
             cima = false;
@@ -199,14 +255,90 @@ int main()
         caçador andar//
         */
         
-        //----------------------------------------------------------------------------------        
+        //---------------------------------------------------------------------------------- 
+        //Colisao entre caçador e pato
+        
+        // Calcular caixas delimitadoras para pato e caçador
+        float patoWidth = pato.width * 0.06f;
+        float patoHeight = pato.height * 0.06f;
 
+        float cacadorWidth = cacador.width * 1.2f;
+        float cacadorHeight = cacador.height * 1.2f;
+
+        bool PatoComCacador; //verificador de colisao entre pato e cacador
+            
+            //Colisao na pratica
+            PatoComCacador = 
+                cord1.x < cord2.x + cacadorWidth && 
+                cord1.x + patoWidth > cord2.x &&
+                cord1.y < cord2.y + cacadorHeight &&
+                cord1.y + patoHeight > cord2.y;
+
+        //----------------------------------------------------------------------------------  
+        //Colisao entre pato e ovo
+
+        // Calcular caixas delimitadoras do ovo
+        float ovoWidth = ovo.width * 0.03f;
+        float ovoHeight = ovo.width * 0.03f;
+
+        bool PatoComOvo; //verificador de colisao entre pato e ovo
+            for (int i = 0; i < numOvos; i++){
+                if (
+                    cord1.x < ovos[i].x + ovoWidth && 
+                    cord1.x + patoWidth > ovos[i].x &&
+                    cord1.y < ovos[i].y + ovoHeight &&
+                    cord1.y + patoHeight > ovos[i].y ){
+                
+
+                PatoComOvo = true; //se a condição acima acontecer PatoComOvo vira True
+                Score += 100; // Add 100 pontos por cada ovo
+
+                ovos[i] = (Vector2)
+                {
+                    GetRandomValue(0, screenWidth - ovo.width),
+                    GetRandomValue(0, screenHeight - ovo.height)
+                }; // Reposiciona o ovo
+
+                if (Score > Highscore){
+                    Highscore = Score;
+                }
+            }
+        }
+
+        //----------------------------------------------------------------------------------
+        //Vitória
+
+            if (PatoComOvo && score >= numOvos * 100){
+                GanhouJogo = True;
+                PlaySound(soundwin);
+            }
+
+            if (PatoComCacador){
+                PlaySound(sounddefeat);
+            }
+    
+
+        //----------------------------------------------------------------------------------        
+        //Bordas
+
+            // Definir cores das bordas, pra facilitar e deixar mais bonito
+
+            Color topColor = WHITE;
+            Color bottomColor = WHITE;
+            Color leftColor = WHITE;
+            Color rightColor = WHITE;
+
+            if (cord1.y < 0) topColor = RED;
+            if (cord1.y > screenHeight - patoHeight) bottomColor = RED;
+            if (cord1.x < 0) leftColor = RED;
+            if (cord1.x > screenWidth - patoWidth) rightColor = RED;
+        
     
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-
+            
 
             ClearBackground(RAYWHITE);
 
@@ -216,64 +348,61 @@ int main()
 
             DrawTextureEx(cacador,(Vector2){cord2.x, cord2.y}, 0.0, 0.08, WHITE); //tamn 
 
+            /*DrawTextureEx(ovo,(Vector2){xxxxx, xxxxx}, 0.0, 0.03, WHITE); //posição do ovo, tamanho
+            */
             //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
 
-            //pedras
+            
+            
+            //----------------------------------------------------------------------------------
+            // Desenho da grade
 
-                // Definição do tamanho da grade
-                const int gridSizeX = 20;
-                const int gridSizeY = 20;
-
-                // Criação e inicialização da grade
-                bool grade[gridSizeX][gridSizeY];
-
-                // Inicialização da grade com obstáculos em forma de labirinto
-                for (int x = 0; x < gridSizeX; x++) {
-                    for (int y = 0; y < gridSizeY; y++) {
-                        if (x == 0 || x == gridSizeX - 1 || y == 0 || y == gridSizeY - 1) {
-                            grade[x][y] = true; // borda do labirinto
-                        } else if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) {
-                            grade[x][y] = true; // pedras em forma de labirinto
-                        } else {
-                            grade[x][y] = false; // espaço vazio
-                        }
+            for (int x = 0; x < gridSizeX; x++) {
+                for (int y = 0; y < gridSizeY; y++) {
+                    if (grade[x][y]) {
+                        DrawTextureEx(pedra, (Vector2){x * 20, y * 20}, 0.0, 1.0, WHITE);
+                            // Desenha a textura da pedra na posição correspondente na grade
+                            // x * 20 e y * 20 determinam a posição da pedra, onde cada célula na grade tem um tamanho de 20 pixels
+                            // (Vector2){x * 20, y * 20} cria um vetor de posição com as coordenadas calculadas
                     }
                 }
+            }
+            //----------------------------------------------------------------------------------
+            // Desenhar ovos
+            for (int i = 0; i < numOvos; i++){
+                DrawTextureEx(ovo, ovos[i], 0.0, 0.3, WHITE); // Desenha o ovo na posição atual
+            }
+            //----------------------------------------------------------------------------------
+            
+            DrawText(TextFormat("SCORE: %d", Score), 10, 10, 20, BLACK);
+            DrawText(TextFormat("HIGHSCORE: %d", Highscore), 10, 40, 20, BLACK);
 
-                // Desenho da grade
-                void DrawGrid(int x, float y);
-                {
-                    for (int x = 0; x < gridSizeX; x++) {
-                        for (int y = 0; y < gridSizeY; y++) {
-                            if (grade[x][y]) {
-                                DrawTextureEx(pedra, (Vector2){x * 20, y * 20}, 0.0, 1.0, WHITE);
-                            }
-                        }
-                    }
-                }
+            //Desenham retângulos coloridos nas bordas da janela para indicar limites visuais (Pra ficar mais bonito ;) )
+            DrawRectangle(0, -1, screenWidth, 1, topColor);
+            DrawRectangle(0, screenHeight, screenWidth, 1, bottomColor);
+            DrawRectangle(-1, 0, 1, screenHeight, leftColor);
+            DrawRectangle(screenWidth, 0, 1, screenHeight, rightColor);
 
-                // Atualiza o loop para checar as colisões da grade
-                while (!WindowShouldClose()) {
+        //----------------------------------------------------------------------------------
+            // Mostra a tela de vitória ou derrota dependendo do caso
 
-                    
-                int x = cord1.x / 20;
-                int y = cord1.y / 20;
-                if (grade[x][y]) {
-                    // colisao detectada
-                    PlaySound(sounddefeat);
-                    DrawTexture(defeat, screenWidth / 2 - defeat.width / 2, screenHeight / 2 - defeat.height / 2, WHITE);
-                }
+            if (GanhouJogo){
+                DrawTexture(victory, screenWidth/2 - victory.width/2, screenHeight/2 - victory.height/2, WHITE);
+            }
+            else if (PatoComCacador){
+                DrawTexture(defeat, screenWidth/2 - victory.width/2, screenHeight/2 - victory.height/2, WHITE);
+            }
 
-        EndDrawing();
+        //----------------------------------------------------------------------------------
+        EndDrawing(); //fecha a área de desenho
         //----------------------------------------------------------------------------------
     }
 
     //Unload
     //--------------------------------------------------------------------------------------
+    CloseAudioDevice();   //fechar audio
     CloseWindow();        //fechar janela
     //--------------------------------------------------------------------------------------
 
     return 0;
 }
-}
-
