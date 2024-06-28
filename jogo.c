@@ -357,7 +357,7 @@ int main(void)
 
             // Desenho pedras
 
-            for(int i = 0; i != 72; i++){
+            for(int i = 0; i != 73; i++){
                 DrawTextureEx(pedra, posicao_pedra[i], 0.0, 0.05, WHITE);
                 }
             
