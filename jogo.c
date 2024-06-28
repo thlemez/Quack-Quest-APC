@@ -119,7 +119,7 @@ int main(void)
         DrawTextureEx(pato, cord, 0.0, 0.05, WHITE);
 
         for(int i = 0; i != 105; i++){
-                DrawTextureEx(pedra, posicao_pedraM2[i], 0.0, 0.05, WHITE);
+                DrawTextureEx(pedra, posicao_pedraM2[i], 0.0, 0.06, WHITE);
                 }
 
         EndDrawing();
