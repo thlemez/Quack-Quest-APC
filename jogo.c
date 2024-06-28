@@ -357,7 +357,7 @@ int main(void)
 
             // Desenho pedras
 
-            DrawTextureEx(pedra,(Vector2){posicao_pedra.x, posicao_pedra.y}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){posicao_pedra->x, posicao_pedra->y}, 0.0, 0.05, WHITE);
             
 
             
