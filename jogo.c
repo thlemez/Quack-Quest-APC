@@ -45,12 +45,23 @@ Sound soundwin;
     Vector2 cord1 = {screenWidth , screenHeight}; //valor inicial x e y do pato
     Vector2 cord2 = {0, 0}; //valor inicial x e y do caçador
     Vector2 ovos[numOvos]; //Q. ovos
+    Vector2 posicao_pedra[] = {
+
+        {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
+        {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
+        {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
+        {1152, 300},{1216, 480}, {1216, 480}, {1152, 420},{1216, 540}, {1216, 600}, {1216, 660}, {1216, 660},
+        {64, 0}, {128, 0}, {192, 0}, {256, 0}, {320, 0}, {384, 0}, {448, 0}, {512, 0}, {576, 0}, {640, 0}, {640, 60}, 
+        {640, 120}, {704, 0}, {768, 0}, {832, 0}, {896, 0}, {960, 0}, {1024, 0}, {1088, 0}, {1152, 0}, {1216, 0}, {1280, 0}, 
+        {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
+        {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
+
+    };
 
     int Score = 0; //Pontuação inicial
     int Highscore = 0; //Maior Pontuação Atingida
     int OvosColetados = 0; // Verificador de Q ovos coletados
 
-    bool grade[screenWidth/titleSize][screenHeight/titleSize];
     bool GanhouJogo = false; //variável de vitória
     bool PatoComCacador = false; //verificador de colisao entre pato e cacador
     bool collision_cacador = false; // inicializar colisão como falso
@@ -60,7 +71,7 @@ Sound soundwin;
     //------------------------------------------------------------------------------------
     // Funções
 
-    void Inicializar(); 
+    void Inicializar();
     void CarregarRecursos();
     void InicializarVariaveis();
     void Atualizar();
@@ -83,11 +94,16 @@ Sound soundwin;
     // Loop do jogo
     while (!WindowShouldClose())
     {
+        if (IsKeyPressed(KEY_R)) {
+            ResetarJogo();
+        }
         if (jogoEmAndamento) {
             Atualizar();
+            VerificarColisoes();
+            
+            Desenhar();
         }
 
-        Desenhar();
     }
 
     DescarregarRecursos();
@@ -138,19 +154,7 @@ void InicializarVariaveis() {
             GetRandomValue(0, screenHeight - ovo.height) // Posição y aleatória dentro da altura da janela descontando o tamanho do ovo
         };
     }
-    //pedras
-    Vector2 posicao_pedra[] = {
 
-        {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
-        {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
-        {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
-        {1152, 300},{1216, 480}, {1216, 480}, {1152, 420},{1216, 540}, {1216, 600}, {1216, 660}, {1216, 660},
-        {64, 0}, {128, 0}, {192, 0}, {256, 0}, {320, 0}, {384, 0}, {448, 0}, {512, 0}, {576, 0}, {640, 0}, {640, 60}, 
-        {640, 120}, {704, 0}, {768, 0}, {832, 0}, {896, 0}, {960, 0}, {1024, 0}, {1088, 0}, {1152, 0}, {1216, 0}, {1280, 0}, 
-        {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
-        {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
-
-    };
         
     Score = 0;
     Highscore = 0;
@@ -436,12 +440,12 @@ void DescarregarRecursos(){
     //--------------------------------------------------------------------------------------
 
 void ResetarJogo() {
-    if (!jogoEmAndamento) {
-            DrawText("Pressione R para reiniciar", screenWidth / 2 - MeasureText("Pressione R para reiniciar", 20) / 2, screenHeight / 2 + 20, 20, BLACK);
-            if (IsKeyPressed(KEY_R)) {
     InicializarVariaveis();
-            }
-    }
+    GanhouJogo = false;
+    PatoComCacador = false;
+    collision_cacador = false;
+    collision_pato = false;
+    jogoEmAndamento = true;
 }
 
 //------------------------------------------------------------------------------------------
