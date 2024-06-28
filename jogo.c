@@ -59,47 +59,24 @@ int main(void)
     
     
     //pedras
+    Vector2 posicao_pedra[] = {
 
-        Vector2 pedraparedeV1[721];
-        for(int i = 0; i <= 720; i++) {
-            pedraparedeV1[i] = Vector2(0, i);
-        }
+        {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {64, 240}, {128, 240}, 
+        {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, {0, 720}, 
+        {1280, 0}, {1280, 60}, {1280, 120}, {1280, 180}, {1280, 240}, {1216, 240}, 
+        {1152, 240},{1280, 480}, {1216, 480}, {1152, 480},{1280, 540}, {1280, 600}, 
+        {1280, 660}, {1280, 720},{64, 0}, {128, 0}, {192, 0}, {256, 0}, {320, 0}, {384, 0}, 
+        {448, 0}, {512, 0}, {576, 0}, {640, 0}, {640, 60}, {640, 120}, {704, 0}, {768, 0}, {832, 0}, {896, 0}, {960, 0}, 
+        {1024, 0}, {1088, 0}, {1152, 0}, {1216, 0}, {1280, 0}, {64, 720}, {128, 720}, {192, 720}, 
+        {256, 720}, {320, 720}, {384, 720}, {448, 720}, {512, 720}, {576, 720}, {640, 720}, {640, 660}, {640, 600}, {704, 720}, 
+        {768, 720}, {832, 720}, {896, 720}, {960, 720}, {1024, 720},{1088, 720}, {1152, 720}, {1216, 720}, {1280, 720}
 
-        Vector2 pedraparedeV2[721];
-        for(int i = 0; i < 720; i++) {
-            pedraparedeV2[i] = Vector2(1280, i);
-        }
+    };
+    // {0, 300}, {0, 360}, {0, 420} coordenadas tunel esquerdo
+    //{1280,300}, {1280, 360}, {1280, 420} coordenadas tunel direita
+     
+        
 
-        Vector2 pedraparedeH1[1281];
-        for(int i = 0; i < 1280; i++) {
-            pedraparedeH1[i] = Vector2(i, 0);
-        }
-
-        Vector2 pedraparedeH2[1281];
-        for(int i = 0; i < 1280; i++) {
-            pedraparedeH2[i] = Vector2(i, 720);
-        }
-
-        Vector2 pedraparedeI1[401];
-        for(int i = 200; i < 600; i++) {
-            pedraparedeI1[i] = Vector2(200, i);
-        }
-
-        Vector2 pedraparedeI2[201];
-        for(int i = 300; i < 500; i++) {
-            pedraparedeI2[i] = Vector2(300, i);
-        }
-
-        Vector2 pedraparedeI3[401];
-        for(int i = 200; i < 600; i++) {
-            pedraparedeI3[i] = Vector2(400, i);
-        }
-
-        Vector2 pedraparedeI4[201];
-        for(int i = 300; i < 500; i++) {
-            pedraparedeI4[i] = Vector2(500, i);
-        }
-        }
     //--------------------------------------------------------------------------------------
     //Inicialização dos Ovos
 
@@ -380,14 +357,8 @@ int main(void)
 
             // Desenho pedras
 
-            DrawTextureEx(pedra,(Vector2){pedraparedeH1}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraparedeH2}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraparedeI1}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraparedeI2}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraparedeI3}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraparedeI4}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraparedeV1}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraparedeV2}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){posicao_pedra.x, posicao_pedra.y}, 0.0, 0.05, WHITE);
+            
 
             
             //----------------------------------------------------------------------------------
