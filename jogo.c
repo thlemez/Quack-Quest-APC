@@ -42,8 +42,8 @@ Sound soundwin;
     //------------------------------------------------------------------------------------
     // Variáveis Globais
 
-    Vector2 cord1 = {screenWidth , screenHeight}; //valor inicial x e y do pato
-    Vector2 cord2 = {0, 0}; //valor inicial x e y do caçador
+    Vector2 cord1 = {screenWidth/2, screenHeight/2}; //valor inicial x e y do pato
+    Vector2 cord2 = {0, screenHeight/2}; //valor inicial x e y do caçador
     Vector2 ovos[numOvos]; //Q. ovos
     Vector2 posicao_pedra[] = {
 
@@ -100,7 +100,7 @@ Sound soundwin;
         if (jogoEmAndamento) {
             Atualizar();
             VerificarColisoes();
-            
+
             Desenhar();
         }
 
@@ -381,8 +381,8 @@ void Desenhar() {
             ClearBackground(RAYWHITE);
 
             DrawTexture(lago, 0, 0, WHITE);
-            DrawTextureEx(pato,(Vector2){cord1.x, cord1.y}, 0.0, 0.06, WHITE); //tamn img do pato
-            DrawTextureEx(cacador,(Vector2){cord2.x, cord2.y}, 0.0, 0.08, WHITE); //tamanho caçador  
+            DrawTextureEx(pato,(Vector2){cord1.x, cord1.y}, 0.0, 0.04, WHITE); //tamn img do pato
+            DrawTextureEx(cacador,(Vector2){cord2.x, cord2.y}, 0.0, 0.06, WHITE); //tamanho caçador  
 
             //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
             //----------------------------------------------------------------------------------
