@@ -60,44 +60,45 @@ int main(void)
     
     //pedras
 
-    Vector2 pedraparedeV1[721];
-        for(int i = 0; i != 720; i++){
-            pedraparedeV1[0, i];
+        Vector2 pedraparedeV1[721];
+        for(int i = 0; i <= 720; i++) {
+            pedraparedeV1[i] = Vector2(0, i);
         }
 
-    Vector2 pedraparedeV2[721];
-        for(int i = 0; i != 720; i++){
-            pedraparedeV2[1280, i];
-        }
-    
-    Vector2 pedraparedeH1[1281];
-        for(int i = 0; i != 1280; i++){
-            pedraparedeH1[i, 0];
+        Vector2 pedraparedeV2[721];
+        for(int i = 0; i < 720; i++) {
+            pedraparedeV2[i] = Vector2(1280, i);
         }
 
-    Vector2 pedraparedeH2[1281];
-        for(int i = 0; i != 1280; i++){
-            pedraparedeH2[i, 720];
+        Vector2 pedraparedeH1[1281];
+        for(int i = 0; i < 1280; i++) {
+            pedraparedeH1[i] = Vector2(i, 0);
         }
 
-    Vector2 pedraparedeI1[401];
-        for(int i = 200; i!= 600; i++){
-            pedraparedeI1[200, i];
-        }
-    
-    Vector2 pedraparedeI2[201];
-        for(int i = 300; i != 500; i++){
-            pedraparedeI2[300, i];
+        Vector2 pedraparedeH2[1281];
+        for(int i = 0; i < 1280; i++) {
+            pedraparedeH2[i] = Vector2(i, 720);
         }
 
-    Vector2 pedraparedeI3[401];
-        for(int i = 200; i!= 600; i++){
-            pedraparedeI3[400, i];
+        Vector2 pedraparedeI1[401];
+        for(int i = 200; i < 600; i++) {
+            pedraparedeI1[i] = Vector2(200, i);
         }
-    
-    Vector2 pedraparedeI4[201];
-        for(int i = 300; i != 500; i++){
-            pedraparedeI4[500, i];
+
+        Vector2 pedraparedeI2[201];
+        for(int i = 300; i < 500; i++) {
+            pedraparedeI2[i] = Vector2(300, i);
+        }
+
+        Vector2 pedraparedeI3[401];
+        for(int i = 200; i < 600; i++) {
+            pedraparedeI3[i] = Vector2(400, i);
+        }
+
+        Vector2 pedraparedeI4[201];
+        for(int i = 300; i < 500; i++) {
+            pedraparedeI4[i] = Vector2(500, i);
+        }
         }
     //--------------------------------------------------------------------------------------
     //Inicialização dos Ovos
