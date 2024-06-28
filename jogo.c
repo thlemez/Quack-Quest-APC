@@ -9,6 +9,9 @@ Texture2D ovo; //declarar ovo
 Texture2D pedra; //declarar pedra
 Texture2D defeat; //declarar derrota
 Texture2D victory; //declarar victory
+
+Sound sounddefeat;
+Sound soundwin;
 //------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------
@@ -42,18 +45,6 @@ Texture2D victory; //declarar victory
     Vector2 cord1 = {screenWidth , screenHeight}; //valor inicial x e y do pato
     Vector2 cord2 = {0, 0}; //valor inicial x e y do caçador
     Vector2 ovos[numOvos]; //Q. ovos
-    Vector2 posicao_pedra[] = {
-
-        {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
-        {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
-        {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
-        {1152, 300},{1216, 480}, {1216, 480}, {1152, 420},{1216, 540}, {1216, 600}, {1216, 660}, {1216, 660},
-        {64, 0}, {128, 0}, {192, 0}, {256, 0}, {320, 0}, {384, 0}, {448, 0}, {512, 0}, {576, 0}, {640, 0}, {640, 60}, 
-        {640, 120}, {704, 0}, {768, 0}, {832, 0}, {896, 0}, {960, 0}, {1024, 0}, {1088, 0}, {1152, 0}, {1216, 0}, {1280, 0}, 
-        {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
-        {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
-
-    };
 
     int Score = 0; //Pontuação inicial
     int Highscore = 0; //Maior Pontuação Atingida
@@ -69,7 +60,7 @@ Texture2D victory; //declarar victory
     //------------------------------------------------------------------------------------
     // Funções
 
-    void Inicializar();
+    void Inicializar(); 
     void CarregarRecursos();
     void InicializarVariaveis();
     void Atualizar();
@@ -119,9 +110,9 @@ void Inicializar() {
     
 void CarregarRecursos() {
 
-    Sound sounddefeat = LoadSound("audio/fiasco-154915.mp3");
+    sounddefeat = LoadSound("audio/fiasco-154915.mp3");
 
-    Sound soundwin = LoadSound("audio/Victory.mp3");
+    soundwin = LoadSound("audio/Victory.mp3");
     
     defeat = LoadTexture("texture/defeat.png"); //linkar img derrota
 
@@ -148,11 +139,27 @@ void InicializarVariaveis() {
         };
     }
     //pedras
-    for (int x = 0; x < screenWidth/titleSize; x++) {
-        for (int y = 0; y < screenHeight/titleSize; y++) {
-            grade[x][y] = (x == 0 || x == screenWidth/titleSize - 1 || y == 0 || y == screenHeight/titleSize - 1 || (x % 2 == 0 && y % 2 == 0));
-        }
-    }
+    Vector2 posicao_pedra[] = {
+
+        {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
+        {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
+        {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
+        {1152, 300},{1216, 480}, {1216, 480}, {1152, 420},{1216, 540}, {1216, 600}, {1216, 660}, {1216, 660},
+        {64, 0}, {128, 0}, {192, 0}, {256, 0}, {320, 0}, {384, 0}, {448, 0}, {512, 0}, {576, 0}, {640, 0}, {640, 60}, 
+        {640, 120}, {704, 0}, {768, 0}, {832, 0}, {896, 0}, {960, 0}, {1024, 0}, {1088, 0}, {1152, 0}, {1216, 0}, {1280, 0}, 
+        {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
+        {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
+
+    };
+        
+    Score = 0;
+    Highscore = 0;
+    OvosColetados = 0;
+    GanhouJogo = false;
+    PatoComCacador = false;
+    collision_cacador = false;
+    collision_pato = false;
+    jogoEmAndamento = true;
 }
 
 void Atualizar(){
@@ -234,7 +241,7 @@ void VerificarColisões(){
         Vector2 NewPos2 = cord2;
         // Colisão com paredes
 
-        for (int i = 0; i < 100; i++){ // for pra listar todas as pedras 
+        for (int i = 0; i < 71; i++){ // for pra listar todas as pedras 
     
                // Determinar as posições do pato e pedra de todas as direções
 
@@ -266,7 +273,7 @@ void VerificarColisões(){
         
         // Colisão com paredes do caçador
 
-        for (int i = 0; i < 100; i++){ // for pra listar todas as pedras 
+        for (int i = 0; i < 71; i++){ // for pra listar todas as pedras 
     
             // Determinar as posições do caçador e pedra de todas as direções
 
@@ -366,20 +373,17 @@ void VerificarColisões(){
 void Desenhar() {
         
         BeginDrawing();
-            
-
+        
             ClearBackground(RAYWHITE);
 
             DrawTexture(lago, 0, 0, WHITE);
-
             DrawTextureEx(pato,(Vector2){cord1.x, cord1.y}, 0.0, 0.06, WHITE); //tamn img do pato
-
-            DrawTextureEx(cacador,(Vector2){cord2.x, cord2.y}, 0.0, 0.08, WHITE); //tamanho caçador 
+            DrawTextureEx(cacador,(Vector2){cord2.x, cord2.y}, 0.0, 0.08, WHITE); //tamanho caçador  
 
             //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
             //----------------------------------------------------------------------------------
 
-            for(int i = 0; i != 73; i++){
+            for(int i = 0; i != 71; i++){
                 DrawTextureEx(pedra, posicao_pedra[i], 0.0, 0.05, WHITE);
                 }
                 
@@ -388,8 +392,9 @@ void Desenhar() {
             for (int i = 0; i < numOvos; i++){
                 DrawTextureEx(ovo, ovos[i], 0.0, 0.015, WHITE); // Desenha o ovo na posição atual
             }
+
             //----------------------------------------------------------------------------------
-            
+            // Score e Highscore drawing 
             DrawText(TextFormat("SCORE: %d", Score), 10, 10, 20, BLACK);
             DrawText(TextFormat("HIGHSCORE: %d", Highscore), 10, 40, 20, BLACK);
 
@@ -401,7 +406,6 @@ void Desenhar() {
                 PlaySound(soundwin);
                 jogoEmAndamento = false;
             }
-
             else if (!jogoEmAndamento && PatoComCacador){
                 DrawTexture(defeat, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
                 PlaySound(sounddefeat);
@@ -442,7 +446,7 @@ void ResetarJogo() {
 
 //------------------------------------------------------------------------------------------
 
-    if (!jogoEmAndamento) {
+/*if (!jogoEmAndamento) {
             DrawText("Pressione R para reiniciar", screenWidth / 2 - MeasureText("Pressione R para reiniciar", 20) / 2, screenHeight / 2 + 20, 20, BLACK);
             if (IsKeyPressed(KEY_R)) {
                 // Reiniciar o jogo
