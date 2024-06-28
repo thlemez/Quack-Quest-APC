@@ -60,129 +60,45 @@ int main(void)
     
     //pedras
 
+    Vector2 pedraparedeV1[721];
+        for(int i = 0; i != 720; i++){
+            pedraparedeV1[0, i];
+        }
 
-    Vector2 pedraL1[27];
-
-    for(int i = 0; i!=27; i++){
-        pedraL1[0, i];    // primeira linha de pedras
-    }
-
-    Vector2 pedraL2[27];
-
-    for(int i = 0; i!=27; i++){
-        pedraL2[1, i];
-    }
-
-    Vector2 pedraL3[] ={
-        {2, 0}, {2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5},
-        {2, 7}, {2, 8}, {2, 9}, {2,10}, {2,11}, {2,12},
-        {2,15}, {2,16}, {2,17}, {2,18}, {2,19}, {2,20},
-        {2,22}, {2,23}, {2,23}, {2,24}, {2,25}, {2,26}
-    };
-    Vector2 pedraL4[] ={
-        {4, 0}, {4, 1}, {4, 2}, {4, 3}, {4, 4}, {4, 5},
-        {4, 7}, {4, 8}, {4, 9}, {4,10}, {4,11}, {4,12},
-        {4,15}, {4,16}, {4,17}, {4,18}, {4,19}, {4,20},
-        {4,22}, {4,23}, {4,24}, {4,25}, {4,26}, {4,27}
-    };
-    Vector2 pedraL5[] ={
-        {5, 0}, {5, 1}, {5, 2}, {5, 3}, {5, 4}, {5, 5},
-        {5, 7}, {5, 8}, {5, 9}, {5,10}, {5,11}, {5,12},
-        {5,15}, {5,16}, {5,17}, {5,18}, {5,19}, {5,20},
-        {5,22}, {5,23}, {5,24}, {5,25}, {5,26}, {5,27}
-    };
-    Vector2 pedraL6[] ={
-        {6, 0}, {6, 1}, {6, 2}, {6, 3}, {6, 4}, {6, 5},
-        {6, 7}, {6, 8}, {6, 9}, {6,10}, {6,11}, {6,12},
-        {6,15}, {6,16}, {6,17}, {6,18}, {6,19}, {6,20},
-        {6,22}, {6,23}, {6,24}, {6,25}, {6,26}, {6,27}
-    };
-    Vector2 pedraL7[26];
-
-        for(int i = 0; i !=12; i++){
-            pedraL7[7, i];
-            for(int j=15; j!=27; j++){
-                pedraL7[7, j];
-            }
+    Vector2 pedraparedeV2[721];
+        for(int i = 0; i != 720; i++){
+            pedraparedeV2[1280, i];
         }
     
-    Vector2 pedraL8[26];
-
-        for (int i = 0; i !=12; i++)
-        {
-            pedraL8[8, i];
-            for(int j = 15; j!=27; j++){
-                pedraL8[8, j];
-            }
-        }
-        
-    Vector2 pedraL9[26];
-
-        for (int i = 0; i !=5; i++)
-        {
-            pedraL9[9, i];
-            for(int j = 7; j!=20; j++){
-                pedraL9[9, j];
-                for(int c = 22; c != 27; c++){
-                    pedraL9[9, c];
-                }
-            }
+    Vector2 pedraparedeH1[1281];
+        for(int i = 0; i != 1280; i++){
+            pedraparedeH1[i, 0];
         }
 
-    Vector2 pedraL10[26];
+    Vector2 pedraparedeH2[1281];
+        for(int i = 0; i != 1280; i++){
+            pedraparedeH2[i, 720];
+        }
 
-        for (int i = 0; i !=12; i++)
-        {
-            pedraL10[10, i];
-            for(int j = 15; j!=27; j++){
-                pedraL10[10, j];
-                for(int c = 22; c != 27; c++){
-                    pedraL10[10, c];
-                }
-            }
+    Vector2 pedraparedeI1[401];
+        for(int i = 200; i!= 600; i++){
+            pedraparedeI1[200, i];
         }
     
-    Vector2 pedraC1[31];
-        
-        for(int i = 0; i != 30; i++){
-            pedraC1[i, 0];
+    Vector2 pedraparedeI2[201];
+        for(int i = 300; i != 500; i++){
+            pedraparedeI2[300, i];
         }
 
-    Vector2 pedraC2[31];
-        
-        for(int i = 0; i != 30; i++){
-            pedraC1[i, 1];
+    Vector2 pedraparedeI3[401];
+        for(int i = 200; i!= 600; i++){
+            pedraparedeI3[400, i];
         }
     
-    Vector2 pedraC3[31];
-        
-        for(int i = 0; i != 30; i++){
-            pedraC3[i, 2];
+    Vector2 pedraparedeI4[201];
+        for(int i = 300; i != 500; i++){
+            pedraparedeI4[500, i];
         }
-
-    Vector2 pedraC4[9];
-
-        for(int i = 2; i!= 10; i++){
-            pedraC4[i, 5];
-        }
-    
-    Vector2 pedraC5[9];
-        for(int i = 2; i != 10; i++){
-            pedraC5[i, 7];
-        }
-
-    Vector2 pedraC6[31];
-
-        for(int i = 0; i != 30; i++){
-            pedraC6[i,26];
-        }
-
-    Vector2 pedraC7[31];
-
-        for(int i = 0; i != 30; i++){
-            pedraC7[i,27];
-        }
-        
     //--------------------------------------------------------------------------------------
     //Inicialização dos Ovos
 
@@ -463,23 +379,16 @@ int main(void)
 
             // Desenho pedras
 
-            DrawTextureEx(pedra,(Vector2){pedraC1}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraC2}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraC3}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraC4}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraC5}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraC6}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraC7}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL1}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL2}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL3}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL4}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL5}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL6}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL7}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL8}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL9}, 0.0, 0.05, WHITE);
-            DrawTextureEx(pedra,(Vector2){pedraL10}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraparedeH1}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraparedeH2}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraparedeI1}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraparedeI2}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraparedeI3}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraparedeI4}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraparedeV1}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraparedeV2}, 0.0, 0.05, WHITE);
+
+            
             //----------------------------------------------------------------------------------
             // Desenhar ovos
             for (int i = 0; i < numOvos; i++){
