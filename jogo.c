@@ -10,8 +10,6 @@ Texture2D pedra; //declarar pedra
 Texture2D defeat; //declarar derrota
 Texture2D victory; //declarar victory
 //------------------------------------------------------------------------------------
-int main(void)
-{
 
 //------------------------------------------------------------------------------------
 //Direções de movimento do pato e do caçador
@@ -29,12 +27,98 @@ int main(void)
 
     // Inicialização
     //--------------------------------------------------------------------------------------
+    // Constantes
+
     const int screenWidth = 1280; //largura em pixels
     const int screenHeight = 720; //altura em pixels
+    const int titleSize = 32; //tile de 32x32 pixels para conter detalhes gráficos (compativel com a resolução)
+    const int gradeSizeX = screenWidth/titleSize;
+    const int gradeSizeY = screenHeight/titleSize;
+    const int numOvos = 30;
+
+    //------------------------------------------------------------------------------------
+    // Variáveis Globais
+
+    Vector2 cord1 = {screenWidth , screenHeight}; //valor inicial x e y do pato
+    Vector2 cord2 = {0, 0}; //valor inicial x e y do caçador
+    Vector2 ovos[numOvos]; //Q. ovos
+    Vector2 posicao_pedra[] = {
+
+        {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
+        {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
+        {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
+        {1152, 300},{1216, 480}, {1216, 480}, {1152, 420},{1216, 540}, {1216, 600}, {1216, 660}, {1216, 660},
+        {64, 0}, {128, 0}, {192, 0}, {256, 0}, {320, 0}, {384, 0}, {448, 0}, {512, 0}, {576, 0}, {640, 0}, {640, 60}, 
+        {640, 120}, {704, 0}, {768, 0}, {832, 0}, {896, 0}, {960, 0}, {1024, 0}, {1088, 0}, {1152, 0}, {1216, 0}, {1280, 0}, 
+        {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
+        {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
+
+    };
+
+    int Score = 0; //Pontuação inicial
+    int Highscore = 0; //Maior Pontuação Atingida
+    int OvosColetados = 0; // Verificador de Q ovos coletados
+
+    bool grade[screenWidth/titleSize][screenHeight/titleSize];
+    bool GanhouJogo = false; //variável de vitória
+    bool PatoComCacador = false; //verificador de colisao entre pato e cacador
+    bool collision_cacador = false; // inicializar colisão como falso
+    bool collision_pato = false; // inicializar colisão como falso
+    bool jogoEmAndamento = true; // Pra congelar o jogo assim q o pato morrer
+
+    //------------------------------------------------------------------------------------
+    // Funções
+
+    void Inicializar();
+    void CarregarRecursos();
+    void InicializarVariaveis();
+    void Atualizar();
+    void VerificarColisoes();
+    void Desenhar();
+    void DescarregarRecursos();
+    void ResetarJogo();
+    
+    //------------------------------------------------------------------------------------
+    // main
+
+    int main(void){
+        
+    Inicializar();
+    CarregarRecursos();
+    InicializarVariaveis();
+
+    SetTargetFPS(60);
+
+    // Loop do jogo
+    while (!WindowShouldClose())
+    {
+        if (jogoEmAndamento) {
+            Atualizar();
+        }
+
+        Desenhar();
+    }
+
+    DescarregarRecursos();
+    CloseAudioDevice();
+    CloseWindow();
+
+    return 0;
+
+
+    }
+    //Implementação de Funções
+    //------------------------------------------------------------------------------------
+
+void Inicializar() {
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window"); //abrir janela
     InitAudioDevice();
+}
+
     
+void CarregarRecursos() {
+
     Sound sounddefeat = LoadSound("audio/fiasco-154915.mp3");
 
     Sound soundwin = LoadSound("audio/Victory.mp3");
@@ -52,123 +136,66 @@ int main(void)
     ovo = LoadTexture("texture/ovo.png"); //linkar img ovo
 
     pedra = LoadTexture("texture/pedra.png"); //linkar img pedra
+}
+    //------------------------------------------------------------------------------------
+void InicializarVariaveis() {
 
-    Vector2 cord1 = {screenWidth , screenHeight}; //valor inicial x e y do patinho
-
-    Vector2 cord2 = {0, 0}; //valor inicial x e y do caçador
-    
-    
-    //pedras
-    Vector2 posicao_pedra[] = {
-
-        {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
-        {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
-        {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
-        {1152, 300},{1216, 480}, {1216, 480}, {1152, 420},{1216, 540}, {1216, 600}, {1216, 660}, {1216, 660},
-        {64, 0}, {128, 0}, {192, 0}, {256, 0}, {320, 0}, {384, 0}, {448, 0}, {512, 0}, {576, 0}, {640, 0}, {640, 60}, 
-        {640, 120}, {704, 0}, {768, 0}, {832, 0}, {896, 0}, {960, 0}, {1024, 0}, {1088, 0}, {1152, 0}, {1216, 0}, {1280, 0}, 
-        {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
-        {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
-
-    };
-    // {0, 300}, {0, 360}, {0, 420} coordenadas tunel esquerdo
-    //{1280,300}, {1280, 360}, {1280, 420} coordenadas tunel direita
-     
-        
-
-    //--------------------------------------------------------------------------------------
     //Inicialização dos Ovos
-
-    const int numOvos = 30;
-    Vector2 ovos[numOvos];
-
-        for( int i = 0; i < numOvos; i++){
-            ovos[i] = (Vector2)
-            {
-                GetRandomValue(0, screenWidth - ovo.width),     // Posição x aleatória dentro da largura da janela descontando o tamanho do ovo
-                GetRandomValue(0, screenHeight - ovo.height)    // Posição y aleatória dentro da altura da janela descontando o tamanho do ovo
-            };
+    for (int i = 0; i < numOvos; i++) {
+        ovos[i] = (Vector2){
+            GetRandomValue(0, screenWidth - ovo.width),  // Posição x aleatória dentro da largura da janela descontando o tamanho do ovo
+            GetRandomValue(0, screenHeight - ovo.height) // Posição y aleatória dentro da altura da janela descontando o tamanho do ovo
+        };
+    }
+    //pedras
+    for (int x = 0; x < screenWidth/titleSize; x++) {
+        for (int y = 0; y < screenHeight/titleSize; y++) {
+            grade[x][y] = (x == 0 || x == screenWidth/titleSize - 1 || y == 0 || y == screenHeight/titleSize - 1 || (x % 2 == 0 && y % 2 == 0));
         }
+    }
+}
 
-    int Score = 0; //Pontuação inicial
-    int Highscore = 0; //Maior Pontuação Atingida
-    int OvosColetados = 0; // Verificador de Q ovos coletados
-    
-    bool GanhouJogo = false; //variável de vitória
-    bool PatoComCacador = false; //verificador de colisao entre pato e cacador
-    bool collision_cacador = false; // inicializar colisão como falso
-    bool collision_pato = false; // inicializar colisão como falso
-    bool jogoEmAndamento = true; // Pra congelar o jogo assim q o pato morrer
-
-
-    SetTargetFPS(60);               //quadros por segundo (FPS)
-    //--------------------------------------------------------------------------------------
-
-
-
-    //loop jogo
-    while (!WindowShouldClose())    // Detectar fechar janela ou esc
-    {
-      if(jogoEmAndamento){
+void Atualizar(){
 
         // Lógica de entrada (teclas pressionadas)
-        if (IsKeyDown(KEY_D))
-        {
+        //pato
+        if (IsKeyDown(KEY_D)){
             pato_direita = true;
-            pato_esquerda = false;
-            pato_cima = false;
-            pato_baixo = false;
+            pato_esquerda = pato_cima = pato_baixo = false;
         }
-        else if (IsKeyDown(KEY_A))
-        {
-            pato_direita = false;
+        else if (IsKeyDown(KEY_A)){
             pato_esquerda = true;
-            pato_cima = false;
-            pato_baixo = false;
+            pato_cima = pato_direita = pato_baixo = false;
         }
-        else if (IsKeyDown(KEY_W))
-        {
-            pato_direita = false;
-            pato_esquerda = false;
+        else if (IsKeyDown(KEY_W)){
             pato_cima = true;
-            pato_baixo = false;
+            pato_baixo = pato_esquerda = pato_direita = false;
         }
-        else if (IsKeyDown(KEY_S))
-        {
-            pato_direita = false;
-            pato_esquerda = false;
-            pato_cima = false;
+        else if (IsKeyDown(KEY_S)){
             pato_baixo = true;
+            pato_cima = pato_direita = pato_esquerda = false;
         }
 
-        if (IsKeyDown(KEY_RIGHT))
-        {
+        //Caçador
+        if (IsKeyDown(KEY_RIGHT)){
             cacador_direita = true;
-            cacador_esquerda = false;
-            cacador_cima = false;
-            cacador_baixo = false;
+            cacador_esquerda = cacador_baixo = cacador_cima = false;
         }
-        else if (IsKeyDown(KEY_LEFT))
-        {
-            cacador_direita = false;
+        else if (IsKeyDown(KEY_LEFT)){
             cacador_esquerda = true;
-            cacador_cima = false;
-            cacador_baixo = false;
+            cacador_cima = cacador_direita = cacador_baixo = false;
         }
-        else if (IsKeyDown(KEY_UP))
-        {
-            cacador_direita = false;
-            cacador_esquerda = false;
+        else if (IsKeyDown(KEY_UP)){
             cacador_cima = true;
-            cacador_baixo = false;
+            cacador_baixo = cacador_direita = cacador_esquerda = false;
         }
-        else if (IsKeyDown(KEY_DOWN))
-        {
-            cacador_direita = false;
-            cacador_esquerda = false;
-            cacador_cima = false;
+        else if (IsKeyDown(KEY_DOWN)){
             cacador_baixo = true;
+            cacador_cima = cacador_direita = cacador_esquerda = false;
         }
+}
+
+void AtualizarPosicoes(){
 
         // Atualização das posições
         Vector2 NewPos1 = cord1; // Pato
@@ -199,16 +226,17 @@ int main(void)
         else if (NewPos2.x < -50) NewPos2.x = screenWidth;
         if (NewPos2.y > screenHeight + 50) NewPos2.y = 0;
         else if (NewPos2.y < -50) NewPos2.y = screenHeight;
+}
 
-         //sistema de colisão com pedras
-        //----------------------------------------------------------------------------------
+void VerificarColisões(){
 
+        Vector2 NewPos1 = cord1;
+        Vector2 NewPos2 = cord2;
         // Colisão com paredes
 
-        for (int i = 0; i < 72; i++){ // for pra listar todas as pedras 
+        for (int i = 0; i < 100; i++){ // for pra listar todas as pedras 
     
-            
-            // Determinar as posições do pato e pedra de todas as direções
+               // Determinar as posições do pato e pedra de todas as direções
 
                 //pato
                 float patoLeft = NewPos1.x;
@@ -231,15 +259,11 @@ int main(void)
                 }
             }
         }
-        
-            //Se nao colidir o pato toma aquela posicao pra ele, ou seja, ele continua andando
             
-            if(!collision_pato){
+            if(!collision_pato){ //Se nao colidir o pato toma aquela posicao pra ele, ou seja, ele continua andando
                 cord1 = NewPos1;
             }
         
-        //----------------------------------------------------------------------------------
-        //---------------------------------------------------------------------------------- 
         // Colisão com paredes do caçador
 
         for (int i = 0; i < 100; i++){ // for pra listar todas as pedras 
@@ -267,7 +291,6 @@ int main(void)
                 }
             }
         }
-
                 if(!collision_cacador){
                     cord2 = NewPos2;
                 }
@@ -292,7 +315,7 @@ int main(void)
                 
                 PatoComCacador = true;
             }
-            
+
             else {
                 PatoComCacador = false;
             }           
@@ -315,7 +338,7 @@ int main(void)
                 patoUp < ovoDown) {
 
                 ovos[i] = (Vector2){-100, -100}; // Mover ovo fora da tela
-                Score += 100;
+                Score += 20;
                 OvosColetados += 1;
             }
 
@@ -323,7 +346,8 @@ int main(void)
                         Highscore = Score;
                     }
             }
-            
+
+
         //----------------------------------------------------------------------------------
 
         //Vitória
@@ -336,9 +360,10 @@ int main(void)
             {
                 jogoEmAndamento = false;
             }
+}
         //----------------------------------------------------------------------------------       
 
-        // Draw
+void Desenhar() {
         
         BeginDrawing();
             
@@ -354,14 +379,10 @@ int main(void)
             //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
             //----------------------------------------------------------------------------------
 
-            // Desenho pedras
-
             for(int i = 0; i != 73; i++){
                 DrawTextureEx(pedra, posicao_pedra[i], 0.0, 0.05, WHITE);
                 }
-            
-
-            
+                
             //----------------------------------------------------------------------------------
             // Desenhar ovos
             for (int i = 0; i < numOvos; i++){
@@ -385,8 +406,43 @@ int main(void)
                 DrawTexture(defeat, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
                 PlaySound(sounddefeat);
             }
-      }
-      if (!jogoEmAndamento) {
+      
+        
+        //----------------------------------------------------------------------------------
+        EndDrawing(); //fecha a área de desenho
+        //----------------------------------------------------------------------------------
+}
+
+void DescarregarRecursos(){
+    //Unload
+    UnloadTexture(pato);
+    UnloadTexture(cacador);
+    UnloadTexture(lago);
+    UnloadTexture(ovo);
+    UnloadTexture(pedra);
+    UnloadTexture(defeat);
+    UnloadTexture(victory);
+    UnloadSound(sounddefeat);
+    UnloadSound(soundwin);
+    //--------------------------------------------------------------------------------------
+
+    CloseAudioDevice();   //fechar audio
+    CloseWindow();        //fechar janela
+}
+    //--------------------------------------------------------------------------------------
+
+void ResetarJogo() {
+    if (!jogoEmAndamento) {
+            DrawText("Pressione R para reiniciar", screenWidth / 2 - MeasureText("Pressione R para reiniciar", 20) / 2, screenHeight / 2 + 20, 20, BLACK);
+            if (IsKeyPressed(KEY_R)) {
+    InicializarVariaveis();
+            }
+    }
+}
+
+//------------------------------------------------------------------------------------------
+
+    if (!jogoEmAndamento) {
             DrawText("Pressione R para reiniciar", screenWidth / 2 - MeasureText("Pressione R para reiniciar", 20) / 2, screenHeight / 2 + 20, 20, BLACK);
             if (IsKeyPressed(KEY_R)) {
                 // Reiniciar o jogo
@@ -407,27 +463,4 @@ int main(void)
                 }
             }
         }
-        //----------------------------------------------------------------------------------
-        EndDrawing(); //fecha a área de desenho
-        //----------------------------------------------------------------------------------
-    }
-
-    //Unload
-    UnloadTexture(pato);
-    UnloadTexture(cacador);
-    UnloadTexture(lago);
-    UnloadTexture(ovo);
-    UnloadTexture(pedra);
-    UnloadTexture(defeat);
-    UnloadTexture(victory);
-    UnloadSound(sounddefeat);
-    UnloadSound(soundwin);
-    //--------------------------------------------------------------------------------------
-
-    CloseAudioDevice();   //fechar audio
-    CloseWindow();        //fechar janela
-    //--------------------------------------------------------------------------------------
-
-    return 0;
-}
-
+*/
