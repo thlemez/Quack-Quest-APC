@@ -16,10 +16,10 @@ int main(void)
 //------------------------------------------------------------------------------------
 //Direções de movimento do pato e do caçador
 
-    bool cima = true;
-    bool baixo = false;
-    bool direita = false;
-    bool esquerda = false;
+    bool pato_cima = false;
+    bool pato_baixo = false;
+    bool pato_direita = true;
+    bool pato_esquerda = false;
 
 // Direções de movimento do caçador
     bool cacador_cima = false;
@@ -63,7 +63,7 @@ int main(void)
     //pedras
 
             // Definição do tamanho da grade
-            const int titleSize = 32 //tile de 32x32 pixels para conter detalhes gráficos (compativel com a resolução)
+            const int titleSize = 32; //tile de 32x32 pixels para conter detalhes gráficos (compativel com a resolução)
             const int gradeSizeX = screenWidth/titleSize;
             const int gradeSizeY = screenHeight/titleSize;
 
@@ -101,10 +101,9 @@ int main(void)
 
     int Score = 0; //Pontuação inicial
     int Highscore = 0; //Maior Pontuação Atingida
-    int OvosColetados = 0 // Verificador de Q ovos coletados
+    int OvosColetados = 0; // Verificador de Q ovos coletados
     
     bool GanhouJogo = false; //variável de vitória
-    bool PatoComOvo = false; //verificador de colisao entre pato e ovo
     bool PatoComCacador = false; //verificador de colisao entre pato e cacador
     bool collision_cacador = false; // inicializar colisão como falso
     bool collision_pato = false; // inicializar colisão como falso
@@ -121,46 +120,94 @@ int main(void)
     {
       if(jogoEmAndamento){
 
-        //para o pato continuar a andar em uma posição até que mude de direção
-        if (IsKeyDown(KEY_D)){ 
-            direita = true;
-            cima = false;
-            esquerda = false;
-            baixo = false;
-        } 
-        if (IsKeyDown(KEY_A)){ 
-            direita = false;
-            cima = false;
-            esquerda = true;
-            baixo = false;
+        // Lógica de entrada (teclas pressionadas)
+        if (IsKeyDown(KEY_D))
+        {
+            pato_direita = true;
+            pato_esquerda = false;
+            pato_cima = false;
+            pato_baixo = false;
         }
-        if (IsKeyDown(KEY_W)){ 
-            direita = false;
-            cima = true;
-            esquerda = false;
-            baixo = false;
+        else if (IsKeyDown(KEY_A))
+        {
+            pato_direita = false;
+            pato_esquerda = true;
+            pato_cima = false;
+            pato_baixo = false;
         }
-        if (IsKeyDown(KEY_S)){
-            direita = false;
-            cima = false;
-            esquerda = false;
-            baixo = true;
+        else if (IsKeyDown(KEY_W))
+        {
+            pato_direita = false;
+            pato_esquerda = false;
+            pato_cima = true;
+            pato_baixo = false;
+        }
+        else if (IsKeyDown(KEY_S))
+        {
+            pato_direita = false;
+            pato_esquerda = false;
+            pato_cima = false;
+            pato_baixo = true;
         }
 
-        Vector2 NewPos1 = cord1; // Armazenar temporariamente novas posições na variavel NewPos
-        
-        if (direita) NewPos1.x += 1.2f; //movimenta pra direita na velocidade 1.2 quadrados por clique
-        if (esquerda) NewPos1.x -= 1.2f; //movimenta pra esquerda na velocidade 1.2 quadrados por clique
-        if (cima) NewPos1.y -= 1.2f; //movimenta pra cima na velocidade 1.2 quadrados por clique
-        if (baixo) NewPos1.y += 1.2f; //movimenta pra baixo na velocidade 1.2 quadrados por clique
-        //----------------------------------------------------------------------------------
+        if (IsKeyDown(KEY_RIGHT))
+        {
+            cacador_direita = true;
+            cacador_esquerda = false;
+            cacador_cima = false;
+            cacador_baixo = false;
+        }
+        else if (IsKeyDown(KEY_LEFT))
+        {
+            cacador_direita = false;
+            cacador_esquerda = true;
+            cacador_cima = false;
+            cacador_baixo = false;
+        }
+        else if (IsKeyDown(KEY_UP))
+        {
+            cacador_direita = false;
+            cacador_esquerda = false;
+            cacador_cima = true;
+            cacador_baixo = false;
+        }
+        else if (IsKeyDown(KEY_DOWN))
+        {
+            cacador_direita = false;
+            cacador_esquerda = false;
+            cacador_cima = false;
+            cacador_baixo = true;
+        }
 
-        //verificar se o pato saiu da janela e ent teletransportar ele pro outro lado
+        // Atualização das posições
+        Vector2 NewPos1 = cord1; // Pato
+        Vector2 NewPos2 = cord2; // Caçador
 
+        //Pato
+        if (pato_direita) NewPos1.x += 1.2f;
+        else if (pato_esquerda) NewPos1.x -= 1.2f;
+        if (pato_cima) NewPos1.y -= 1.2f;
+        else if (pato_baixo) NewPos1.y += 1.2f;
+
+        //Caçador
+        if (cacador_direita) NewPos2.x += 1.2f;
+        else if (cacador_esquerda) NewPos2.x -= 1.2f;
+        if (cacador_cima) NewPos2.y -= 1.2f;
+        else if (cacador_baixo) NewPos2.y += 1.2f;
+
+        // Verificar limites da janela (teletransporte)
+
+        //Pato
         if (NewPos1.x > screenWidth + 50) NewPos1.x = 0;
-        if (NewPos1.x < -50) NewPos1.x = screenWidth;
+        else if (NewPos1.x < -50) NewPos1.x = screenWidth;
         if (NewPos1.y > screenHeight + 50) NewPos1.y = 0;
-        if (NewPos1.y < -50) NewPos1.y = screenHeight;
+        else if (NewPos1.y < -50) NewPos1.y = screenHeight;
+
+        //Caçador
+        if (NewPos2.x > screenWidth + 50) NewPos2.x = 0;
+        else if (NewPos2.x < -50) NewPos2.x = screenWidth;
+        if (NewPos2.y > screenHeight + 50) NewPos2.y = 0;
+        else if (NewPos2.y < -50) NewPos2.y = screenHeight;
 
          //sistema de colisão com pedras
         //----------------------------------------------------------------------------------
@@ -173,10 +220,10 @@ int main(void)
             // Determinar as posições do pato e pedra de todas as direções
 
                 //pato
-                float patoLeft = NewPos.x;
-                float patoRight = NewPos.x + pato.width;
-                float patoUp = NewPos.y;
-                float patoDown = NewPos.y + pato.height;
+                float patoLeft = NewPos1.x;
+                float patoRight = NewPos1.x + pato.width;
+                float patoUp = NewPos1.y;
+                float patoDown = NewPos1.y + pato.height;
 
                 //pedra
                 float pedraLeft = posicao_pedra[i].x;
@@ -196,51 +243,11 @@ int main(void)
         
             //Se nao colidir o pato toma aquela posicao pra ele, ou seja, ele continua andando
             
-            if(!collision){
+            if(!collision_pato){
                 cord1 = NewPos1;
             }
         
         //----------------------------------------------------------------------------------
-
-        //Cacador andar
-        if (IsKeyDown(KEY_RIGHT)){ 
-            cacador_direita = true;
-            cacador_cima = false;
-            cacador_esquerda = false;
-            cacador_baixo = false;
-        } 
-        if (IsKeyDown(KEY_LEFT)){ 
-            cacador_direita = false;
-            cacador_cima = false;
-            cacador_esquerda = true;
-            cacador_baixo = false;
-        }
-        if (IsKeyDown(KEY_UP)){ 
-            cacador_direita = false;
-            cacador_cima = true;
-            cacador_esquerda = false;
-            cacador_baixo = false;
-        }
-        if (IsKeyDown(KEY_DOWN)){
-            cacador_direita = false;
-            cacador_cima = false;
-            cacador_esquerda = false;
-            cacador_baixo = true;
-        }
-
-        Vector2 NewPos2 = cord2;
-
-        if(cacador_direita == true) NewPos2.x += 1.2f;
-        if(cacador_esquerda == true) NewPos2.x -= 1.2f;
-        if(cacador_cima == true) NewPos2.y -= 1.2f;
-        if(cacador_baixo == true) NewPos2.y += 1.2f;
-        //----------------------------------------------------------------------------------
-
-        //verificar se o pato saiu da janela e ent teletransportar ele pro outro lado
-        if(NewPos2.x > screenWidth + 50) NewPos2.x = 0;
-        if(NewPos2.x < -50) NewPos2.x = screenWidth;
-        if(NewPos2.y > screenHeight + 50) NewPos2.y = 0;
-        if(NewPos2.y < -50) NewPos2.y = screenHeight;
         //---------------------------------------------------------------------------------- 
         // Colisão com paredes do caçador
 
@@ -248,7 +255,7 @@ int main(void)
     
             // Determinar as posições do caçador e pedra de todas as direções
 
-                //pato
+                //caçador
                 float cacadorLeft = NewPos2.x;
                 float cacadorRight = NewPos2.x + cacador.width;
                 float cacadorUp = NewPos2.y;
@@ -270,11 +277,27 @@ int main(void)
             }
         }
 
+                if(!collision_cacador){
+                    cord2 = NewPos2;
+                }
+
         //----------------------------------------------------------------------------------
+        //Colisão Pato e caçador
+
+            float patoLeft = cord1.x;
+            float patoRight = cord1.x + pato.width;
+            float patoUp = cord1.y;
+            float patoDown = cord1.y + pato.height;
+
+            float cacadorLeft = cord2.x;
+            float cacadorRight = cord2.x + cacador.width;
+            float cacadorUp = cord2.y;
+            float cacadorDown = cord2.y + cacador.height;
+
             if (patoRight > cacadorLeft &&
                 patoLeft < cacadorRight &&
-                patoBottom > cacadorTop &&
-                patoTop < cacadorBottom) {
+                patoDown > cacadorUp &&
+                patoUp < cacadorDown) {
                 
                 PatoComCacador = true;
             }
@@ -292,13 +315,13 @@ int main(void)
 
                 float ovoLeft = ovos[i].x;
                 float ovoRight = ovos[i].x + ovo.width;
-                float ovoTop = ovos[i].y;
-                float ovoBottom = ovos[i].y + ovo.height;
+                float ovoUp = ovos[i].y;
+                float ovoDown = ovos[i].y + ovo.height;
 
             if (patoRight > ovoLeft &&
                 patoLeft < ovoRight &&
-                patoBottom > ovoTop && 
-                patoTop < ovoBottom) {
+                patoDown > ovoUp && 
+                patoUp < ovoDown) {
 
                 ovos[i] = (Vector2){-100, -100}; // Mover ovo fora da tela
                 Score += 100;
@@ -344,10 +367,9 @@ int main(void)
             for (int x = 0; x < gradeSizeX; x++) {
                 for (int y = 0; y < gradeSizeY; y++) {
                     if (grade[x][y]) {
-                        DrawTextureEx(pedra, x * titleSize, x * titleSize, WHITE);
+                        DrawTextureEx(pedra,(Vector2){x * titleSize, x * titleSize}, 0.0, 0.05, WHITE);
                             // Desenha a textura da pedra na posição correspondente na grade
-                            // x * 20 e y * 20 determinam a posição da pedra, onde cada célula na grade tem um tamanho de 20 pixels
-                            // (Vector2){x * 20, y * 20} cria um vetor de posição com as coordenadas calculadas
+                            // (Vector2){x * titleSize, y * titleSize} cria um vetor de posição com as coordenadas calculadas
                     }
                 }
             }
@@ -366,7 +388,7 @@ int main(void)
 
             if (GanhouJogo){
                 DrawTexture(victory, screenWidth / 2 - victory.width / 2, screenHeight / 2 - victory.height / 2, WHITE);
-                PlaySound(soundwin)
+                PlaySound(soundwin);
                 jogoEmAndamento = false;
             }
 
@@ -419,4 +441,4 @@ int main(void)
 
     return 0;
 }
-}
+
