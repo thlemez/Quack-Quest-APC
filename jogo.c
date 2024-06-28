@@ -206,7 +206,7 @@ int main(void)
 
         // Colisão com paredes
 
-        for (int i = 0; i < 100; i++){ // for pra listar todas as pedras 
+        for (int i = 0; i < 72; i++){ // for pra listar todas as pedras 
     
             
             // Determinar as posições do pato e pedra de todas as direções
