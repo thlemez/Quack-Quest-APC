@@ -58,7 +58,7 @@ int main(void)
 
     //defeat = LoadTexture("texture/defeat.png");  // Linkar img derrota
     //victory = LoadTexture("texture/victory.png"); // Linkar img vitória
-    lago = LoadTexture("texture/lago.jpg");      // Linkar img lago
+    lago = LoadTexture("texture/lago.png");      // Linkar img lago
     pato = LoadTexture("texture/pato.png");   // Linkar img pato
     //cacador = LoadTexture("texture/cacadorpng.png"); // Linkar img caçador
     //ovo = LoadTexture("texture/ovo.png");        // Linkar img ovo
@@ -114,7 +114,7 @@ int main(void)
 
         ClearBackground(RAYWHITE);
 
-        DrawTexture( lago, 0, 0, WHITE );
+        DrawTexture(lago, 0, 0, WHITE);
 
         DrawTextureEx(pato, cord, 0.0, 0.05, WHITE);
 
