@@ -57,34 +57,132 @@ int main(void)
 
     Vector2 cord2 = {0, 0}; //valor inicial x e y do caçador
     
-    Vector2 posicao_pedra[100]; 
-
-
+    
     //pedras
 
-            // Definição do tamanho da grade
-            const int titleSize = 32; //tile de 32x32 pixels para conter detalhes gráficos (compativel com a resolução)
-            const int gradeSizeX = screenWidth/titleSize;
-            const int gradeSizeY = screenHeight/titleSize;
 
-            // Criação e inicialização da grade
-            bool grade[gradeSizeX][gradeSizeY];
+    Vector2 pedraL1[27];
 
-            // Inicialização da grade com obstáculos em forma de labirinto
-            for (int x = 0; x < gradeSizeX; x++) {
-                for (int y = 0; y < gradeSizeY; y++) {
-                    if (x == 0 || x == gradeSizeX - 1 || y == 0 || y == gradeSizeY - 1) {
-                        grade[x][y] = true; // borda do labirinto
-                    /*
-                    } else if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) {
-                        grade[x][y] = true; // pedras em forma de labirinto
-                    */
-                    } else {
-                        grade[x][y] = (x % 2 == 0 && y % 2 == 0); // Criar padrão de labirinto
-                    }
+    for(int i = 0; i!=27; i++){
+        pedraL1[0, i];    // primeira linha de pedras
+    }
+
+    Vector2 pedraL2[27];
+
+    for(int i = 0; i!=27; i++){
+        pedraL2[1, i];
+    }
+
+    Vector2 pedraL3[] ={
+        {2, 0}, {2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5},
+        {2, 7}, {2, 8}, {2, 9}, {2,10}, {2,11}, {2,12},
+        {2,15}, {2,16}, {2,17}, {2,18}, {2,19}, {2,20},
+        {2,22}, {2,23}, {2,23}, {2,24}, {2,25}, {2,26}
+    };
+    Vector2 pedraL4[] ={
+        {4, 0}, {4, 1}, {4, 2}, {4, 3}, {4, 4}, {4, 5},
+        {4, 7}, {4, 8}, {4, 9}, {4,10}, {4,11}, {4,12},
+        {4,15}, {4,16}, {4,17}, {4,18}, {4,19}, {4,20},
+        {4,22}, {4,23}, {4,24}, {4,25}, {4,26}, {4,27}
+    };
+    Vector2 pedraL5[] ={
+        {5, 0}, {5, 1}, {5, 2}, {5, 3}, {5, 4}, {5, 5},
+        {5, 7}, {5, 8}, {5, 9}, {5,10}, {5,11}, {5,12},
+        {5,15}, {5,16}, {5,17}, {5,18}, {5,19}, {5,20},
+        {5,22}, {5,23}, {5,24}, {5,25}, {5,26}, {5,27}
+    };
+    Vector2 pedraL6[] ={
+        {6, 0}, {6, 1}, {6, 2}, {6, 3}, {6, 4}, {6, 5},
+        {6, 7}, {6, 8}, {6, 9}, {6,10}, {6,11}, {6,12},
+        {6,15}, {6,16}, {6,17}, {6,18}, {6,19}, {6,20},
+        {6,22}, {6,23}, {6,24}, {6,25}, {6,26}, {6,27}
+    };
+    Vector2 pedraL7[26];
+
+        for(int i = 0; i !=12; i++){
+            pedraL7[7, i];
+            for(int j=15; j!=27; j++){
+                pedraL7[7, j];
+            }
+        }
+    
+    Vector2 pedraL8[26];
+
+        for (int i = 0; i !=12; i++)
+        {
+            pedraL8[8, i];
+            for(int j = 15; j!=27; j++){
+                pedraL8[8, j];
+            }
+        }
+        
+    Vector2 pedraL9[26];
+
+        for (int i = 0; i !=5; i++)
+        {
+            pedraL9[9, i];
+            for(int j = 7; j!=20; j++){
+                pedraL9[9, j];
+                for(int c = 22; c != 27; c++){
+                    pedraL9[9, c];
                 }
             }
+        }
 
+    Vector2 pedraL10[26];
+
+        for (int i = 0; i !=12; i++)
+        {
+            pedraL10[10, i];
+            for(int j = 15; j!=27; j++){
+                pedraL10[10, j];
+                for(int c = 22; c != 27; c++){
+                    pedraL10[10, c];
+                }
+            }
+        }
+    
+    Vector2 pedraC1[31];
+        
+        for(int i = 0; i != 30; i++){
+            pedraC1[i, 0];
+        }
+
+    Vector2 pedraC2[31];
+        
+        for(int i = 0; i != 30; i++){
+            pedraC1[i, 1];
+        }
+    
+    Vector2 pedraC3[31];
+        
+        for(int i = 0; i != 30; i++){
+            pedraC3[i, 2];
+        }
+
+    Vector2 pedraC4[9];
+
+        for(int i = 2; i!= 10; i++){
+            pedraC4[i, 5];
+        }
+    
+    Vector2 pedraC5[9];
+        for(int i = 2; i != 10; i++){
+            pedraC5[i, 7];
+        }
+
+    Vector2 pedraC6[31];
+
+        for(int i = 0; i != 30; i++){
+            pedraC6[i,26];
+        }
+
+    Vector2 pedraC7[31];
+
+        for(int i = 0; i != 30; i++){
+            pedraC7[i,27];
+        }
+        
     //--------------------------------------------------------------------------------------
     //Inicialização dos Ovos
 
@@ -363,16 +461,25 @@ int main(void)
             //DrawText("Mova o pato", 0, 100, 20, LIGHTGRAY);
             //----------------------------------------------------------------------------------
 
-            // Desenho da grade
-            for (int x = 0; x < gradeSizeX; x++) {
-                for (int y = 0; y < gradeSizeY; y++) {
-                    if (grade[x][y]) {
-                        DrawTextureEx(pedra,(Vector2){x * titleSize, x * titleSize}, 0.0, 0.05, WHITE);
-                            // Desenha a textura da pedra na posição correspondente na grade
-                            // (Vector2){x * titleSize, y * titleSize} cria um vetor de posição com as coordenadas calculadas
-                    }
-                }
-            }
+            // Desenho pedras
+
+            DrawTextureEx(pedra,(Vector2){pedraC1}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraC2}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraC3}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraC4}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraC5}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraC6}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraC7}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL1}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL2}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL3}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL4}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL5}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL6}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL7}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL8}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL9}, 0.0, 0.05, WHITE);
+            DrawTextureEx(pedra,(Vector2){pedraL10}, 0.0, 0.05, WHITE);
             //----------------------------------------------------------------------------------
             // Desenhar ovos
             for (int i = 0; i < numOvos; i++){
