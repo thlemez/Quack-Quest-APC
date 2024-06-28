@@ -55,7 +55,7 @@ int main(void)
 
     Vector2 cord1 = {screenWidth , screenHeight}; //valor inicial x e y do patinho
 
-    Vector2 cord2 = {640, 360}; //valor inicial x e y do caçador
+    Vector2 cord2 = {0, 0}; //valor inicial x e y do caçador
     
     
     //pedras
