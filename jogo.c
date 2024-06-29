@@ -387,7 +387,7 @@ int main(void)
             // Desenhar score atual
             DrawText(TextFormat("Score: %d", Score), 10, 10, 20, BLACK);
             // Desenhar high score
-            DrawText(TextFormat("High Score: %d", highScore), 20, 50, 20, BLACK);
+            DrawText(TextFormat("High Score: %d", highScore), 10, 40, 20, BLACK);
 
                 if(GameOver == 2){
                     DrawTexture(victory, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
