@@ -393,7 +393,7 @@ int main(void)
                     DrawTexture(victory, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
                 }
     }
-        
+    
         else{
             DrawTexture(defeat, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
         }
