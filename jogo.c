@@ -30,29 +30,13 @@ int ovos_coletados = 0;
 // Array para armazenar os ovos
     Ovo ovos[NUM_OVOS];
 
-// Função para inicializar ovos garantindo que não nasçam sobre pedras
-void InicializarOvos(Vector2 *posicao_pedras, int num_pedras) {
-    for (int i = 0; i < NUM_OVOS; i++) {
-        bool pos_valida = false;
-        while (!pos_valida) {
-            pos_valida = true;
-            ovos[i].pos.x = GetRandomValue(0, 1280 - ovoWidth);
-            ovos[i].pos.y = GetRandomValue(0, 720 - ovoHeight);
-            ovos[i].coletado = false;
-            
-            Rectangle ovorec = { ovos[i].pos.x, ovos[i].pos.y, ovoWidth, ovoHeight };
-
-            for (int j = 0; j < num_pedras; j++) {
-                Rectangle pedrarec = { posicao_pedras[j].x, posicao_pedras[j].y, pedrawidth, pedraheight };
-
-                if (CheckCollisionRecs(ovorec, pedrarec)) {
-                    pos_valida = false;
-                    break;
-                }
-            }
-        }
-    }
-}
+Vector2 posicao_ovos[NUM_OVOS] = {
+    {160, 80}, {320, 160}, {480, 240}, {640, 320}, {800, 400}, {960, 480}, {1120, 560},
+    {80, 160}, {240, 240}, {400, 320}, {560, 400}, {720, 480}, {880, 560}, {1040, 640},
+    {240, 80}, {400, 160}, {560, 240}, {720, 320}, {880, 400}, {1040, 480}, {1200, 560},
+    {160, 320}, {320, 400}, {480, 480}, {640, 560}, {800, 640}, {960, 720}, {1120, 800},
+    {80, 400}, {240, 480}, {400, 560}, {560, 640}
+};
 
 
 int main(void)
@@ -79,7 +63,7 @@ int main(void)
 
     Vector2 cord = {64, 600};
 
-    Vector2 posicao_pedraM1[NUM_PEDRASM1] = {
+    /*Vector2 posicao_pedraM1[NUM_PEDRASM1] = {
         {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
         {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
         {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
@@ -89,7 +73,7 @@ int main(void)
         {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
         {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
     };
-    
+    */
     Vector2 posicao_pedraM2[NUM_PEDRASM2] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {320,0}, {384,0}, {448,0}, {512, 0}, {576,0},
         {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0}, {1152,0},
@@ -107,7 +91,7 @@ int main(void)
         {448,660}, {512,660}, {576,660}, {704,660}, {768,660}, {832,660}, {896,660},
         {960,660}, {1024,660}, {1088,660}, {1216,180}, {1152,660}, {1216,660}
     };
-    
+    /*
     Vector2 posicao_pedraM3[NUM_PEDRASM3] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {384,0}, {448,0}, {512,0}, {576,0}, 
         {640,0}, {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0},
@@ -124,7 +108,7 @@ int main(void)
         {640,600}, {1216,600}, {0,660}, {64,660}, {128, 660}, {192,660}, {256,660}, 
         {384,660}, {448,660}, {512,660}, {576,660}, {640,660}, {704,660}, {768,660}, {832,660}, {896,660}, {960,660}, {1024,660}, {1152,660}, {1216,660}
     };
-    
+    */
     //------------------------------------------------------------------------------------
     // Direções de movimento do pato e do caçador
     bool pato_cima = false;
@@ -231,7 +215,7 @@ int main(void)
                     if (!collision) {
                         cord = NewPos1;
                     }
-            }
+            
         
 
        // Lógica de movimento do caçador
@@ -292,7 +276,7 @@ int main(void)
                 if (!cacadorCollision) {
                     cacadorPos = NewPos2;
                 }
-        
+    
             //----------------------------------------------------------------------------------
             //Colisão pato e caçador
             
@@ -312,10 +296,11 @@ int main(void)
 
         // Verificar colisão com os ovos
         // Colisão com ovos
+
         for (int i = 0; i < NUM_OVOS; i++) {
             if (!ovos[i].coletado) {
                 Rectangle patorec = {cord.x, cord.y, patowidth, patoheight};
-                Rectangle ovorec = {ovos[i].pos.x, ovos[i].pos.y, ovoWidth, ovoHeight};
+                Rectangle ovorec = {posicao_ovos[i].x, posicao_ovos[i].y, ovoWidth, ovoHeight};
                 if (CheckCollisionRecs(patorec, ovorec)) {
                     ovos[i].coletado = true;
                     ovos_coletados++;
@@ -323,20 +308,18 @@ int main(void)
                 }
             }
         }
-                    if(Score > highScore){
-                        highScore = Score;
-                    }
 
-        // Condição de vitória
+        // Update high score if current score exceeds it
+        if (Score > highScore) {
+            highScore = Score;
+        }
+
+        // Check for victory condition
         if (ovos_coletados >= NUM_OVOS) {
             PlaySound(soundwin);
             DrawTexture(victory, 0, 0, RAYWHITE);
             DrawTexture(recomecar, 320, 200, RAYWHITE);
-
-        
         }
-    }
-
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -398,4 +381,5 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     return 0;
+}
 }
