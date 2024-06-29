@@ -30,3 +30,50 @@
         if (!collision) {
             cord = NewPos1;
         }
+
+
+        
+        // Atualiza a posição do caçador
+        Vector2 NewPos2 = cacadorPos;
+        NewPos2.x += cacadorDir.x * 1.0f;
+        NewPos2.y += cacadorDir.y * 1.0f;
+
+        // Verificar limites da janela para o caçador (teleporte)
+        if (NewPos2.x > screenWidth + 50) NewPos2.x = 0;
+        else if (NewPos2.x < -50) NewPos2.x = screenWidth;
+        if (NewPos2.y > screenHeight + 50) NewPos2.y = 0;
+        else if (NewPos2.y < -50) NewPos2.y = screenHeight;
+
+        // Retângulo de delimitação do caçador
+        Rectangle cacadorrec = {
+            cacadorPos.x,
+            cacadorPos.y,
+            patoheight,
+            patowidth
+        };
+
+        // Atualiza a posição do retângulo de delimitação do caçador
+        cacadorrec.x = NewPos2.x;
+        cacadorrec.y = NewPos2.y;
+
+        // Verificar colisão com obstáculos para o caçador
+        bool cacadorCollision = false;
+        for (int i = 0; i < NUM_PEDRASM3; i++) {
+            Rectangle pedrarecM3 = {
+                posicao_pedraM3[i].x,
+                posicao_pedraM3[i].y,
+                pedrawidth,
+                pedraheight
+            };
+
+            if (CheckCollisionRecs(cacadorrec, pedrarecM3)) {
+                cacadorCollision = true;
+                break; // Sai do loop se houver uma colisão
+            }
+        }
+
+        // Se não houver colisão, atualiza a posição do caçador
+        if (!cacadorCollision) {
+            cacadorPos = NewPos2;
+        }
+
