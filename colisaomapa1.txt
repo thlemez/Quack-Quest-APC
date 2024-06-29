@@ -1,0 +1,32 @@
+/ struct do retangulo invisivel q fica ao redor do pato
+        Rectangle patorec = {
+        cord.x, 
+        cord.y,
+        patoheight,
+        patowidth
+        };
+
+        // Atualizar a posição do pato
+        patorec.x = NewPos1.x;
+        patorec.y = NewPos1.y;
+
+        bool collision = false;
+        //struct do retangulo invisivel q fica ao redor da pedra e loop q detecta colisao entre os dois rentanfulos : pedra e pato 
+        for (int i = 0; i < NUM_PEDRASM1; i++) {
+            Rectangle pedrarecM1 = {
+                posicao_pedraM1[i].x,
+                posicao_pedraM1[i].y,
+                pedrawidth,
+                pedraheight
+            };
+
+            if (CheckCollisionRecs(patorec, pedrarecM2)) {
+                collision = true;
+                break; // sair do loop se houver colisão
+            }
+        }
+
+        // Se não houver colisão, atualizar a posição do pato
+        if (!collision) {
+            cord = NewPos1;
+        }
