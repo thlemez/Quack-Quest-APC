@@ -1,7 +1,9 @@
 #include "include/raylib.h"
 #include "include/lemes.h"
 
-#define NUM_PEDRAS 109
+#define NUM_PEDRASM1 73
+#define NUM_PEDRASM2 109
+#define NUM_PEDRASM3 108
 #define patoheight 40
 #define patowidth 40
 #define pedrawidth 64
@@ -27,7 +29,19 @@ int main(void)
 
     Vector2 cord = { (float)screenWidth/2, (float)screenHeight/2 };
 
-    Vector2 posicao_pedraM2[NUM_PEDRAS] = {
+    Vector2 posicao_pedraM1[] = {
+
+        {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
+        {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
+        {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
+        {1152, 300},{1216, 480}, {1216, 480}, {1152, 420},{1216, 540}, {1216, 600}, {1216, 660}, {1216, 660},
+        {64, 0}, {128, 0}, {192, 0}, {256, 0}, {320, 0}, {384, 0}, {448, 0}, {512, 0}, {576, 0}, {640, 0}, {640, 60}, 
+        {640, 120}, {704, 0}, {768, 0}, {832, 0}, {896, 0}, {960, 0}, {1024, 0}, {1088, 0}, {1152, 0}, {1216, 0}, {1280, 0}, 
+        {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
+        {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
+
+    };
+    Vector2 posicao_pedraM2[NUM_PEDRASM2] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {320,0}, {384,0}, {448,0}, {512, 0}, {576,0},
         {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0}, {1152,0},
         {1216,0}, {0,60}, {576,60}, {704,60}, {1216,60},{0,120},  {128,120}, {192,120},
@@ -44,13 +58,24 @@ int main(void)
         {448,660}, {512,660}, {576,660}, {704,660}, {768,660}, {832,660}, {896,660},
         {960,660}, {1024,660}, {1088,660}, {1216,180}, {1152,660}, {1216,660}
     };
+    Vector2 posicao_pedraM3[] = {
+        {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {384,0}, {448,0}, {512,0}, {576,0}, 
+        {640,0}, {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0},
+        {1152,0}, {1216,0}, {0,60}, {256,60}, {384,60}, {1216,60}, {0,120}, {128,120},
+        {512,120}, {640,120}, {704,120}, {768,120}, {832,120}, {960,120}, {1088,120},
+        {1216,120}, {0,180}, {128,180}, {192,180}, {256,180}, {384,180}, {512,180}, 
+        {768,180}, {960,180},  {1260,180}, {0,240}, {192,240}, {384,240}, {512,240}, 
+        {576,240}, {768,240}, {960,240}, {1024,240}, {1216,240}, {0,300}, {64,300},
+        {1024,300}, {1152,300}, {1216,300}, {192,360}, {320,360}, {384,360}, {512,360},
+        {0,420}, {64,420}, {192,420}, {704,420}, {768,420}, {832,420}, {896,420},
+        {1024,420}, {1152,420}, {1216,420}, {0,480}, {192,480}, {320,480}, {384,480},
+        {512,480}, {832,480}, {1024,480}, {1216,480},{0,540}, {512,540}, {640,540}, 
+        {832,540}, {1024,540}, {1088,540}, {1216,540}, {0,600}, {256,600}, {384,600}, 
+        {640,600}, {1216,600}, {0,660}, {64,660}, {128, 660}, {192,660}, {256,660}, 
+        {384,660}, {448,660}, {512,660}, {576,660}, {640,660}, {704,660}, {768,660}, {832,660}, {896,660}, {960,660}, {1024,660}, {1152,660}, {1216,660}
+        };
 
-    Rectangle patorec = {
-        cord.x, 
-        cord.y,
-        patoheight,
-        patowidth
-    };
+    
 
     //Direções de movimento do pato e do caçador
     bool pato_cima = false;
@@ -115,21 +140,29 @@ int main(void)
         if (NewPos1.y > screenHeight + 50) NewPos1.y = 0;
         else if (NewPos1.y < -50) NewPos1.y = screenHeight;
 
+        // struct do retangulo invisivel q fica ao redor do pato
+        Rectangle patorec = {
+        cord.x, 
+        cord.y,
+        patoheight,
+        patowidth
+        };
+
         // Atualizar a posição do pato
         patorec.x = NewPos1.x;
         patorec.y = NewPos1.y;
 
         bool collision = false;
-         
-        for (int i = 0; i < NUM_PEDRAS; i++) {
-            Rectangle pedrarec = {
+        //struct do retangulo invisivel q fica ao redor da pedra e loop q detecta colisao entre os dois rentanfulos : pedra e pato 
+        for (int i = 0; i < NUM_PEDRASM2; i++) {
+            Rectangle pedrarecM2 = {
                 posicao_pedraM2[i].x,
                 posicao_pedraM2[i].y,
                 pedrawidth,
                 pedraheight
             };
 
-            if (CheckCollisionRecs(patorec, pedrarec)) {
+            if (CheckCollisionRecs(patorec, pedrarecM2)) {
                 collision = true;
                 break; // sair do loop se houver colisão
             }
@@ -152,9 +185,13 @@ int main(void)
 
         DrawTextureEx(pato, cord, 0.0, 0.05, WHITE);
 
-        for (int i = 0; i < NUM_PEDRAS; i++) {
+        // for(int i = 0; i <NUM_PEDRASM1; i++){DrawtextureEx(pedra, posicao_pedraM1[i], 0.0, 0.06);} // para geracao do mapa 1
+
+         for (int i = 0; i < NUM_PEDRASM2; i++) {
             DrawTextureEx(pedra, posicao_pedraM2[i], 0.0, 0.06, WHITE);
         }
+
+        // for(int i = 0; i <NUM_PEDRASM3; i++){DrawtextureEx(pedra, posicao_pedraM3[i], 0.0, 0.06);} // para geracao do mapa 3
 
         EndDrawing();
         //----------------------------------------------------------------------------------
