@@ -2,9 +2,7 @@
 #include "include/lemes.h"
 #include <stdlib.h> // para numeros aleatorios
 
-#define NUM_PEDRASM1 73
 #define NUM_PEDRASM2 109
-#define NUM_PEDRASM3 108
 #define patoheight 40
 #define patowidth 40
 #define pedrawidth 64
@@ -35,12 +33,14 @@ Vector2 posicao_ovos[NUM_OVOS] = {
     {80, 160}, {240, 240}, {400, 320}, {560, 400}, {720, 480}, {880, 560}, {1040, 640},
     {240, 80}, {400, 160}, {560, 240}, {720, 320}, {880, 400}, {1040, 480}, {1200, 560},
     {160, 320}, {320, 400}, {480, 480}, {640, 560}, {800, 640}, {960, 720}, {1120, 800},
-    {80, 400}, {240, 480}, {400, 560}, {560, 640}
+    {80, 400}, {240, 480}
 };
 
 
 int main(void)
 {
+    int newGame = 1;
+    while(newGame){
     //------------------------------------------------------------------------------------
     Texture2D lago; //declarar lago
     Texture2D pato; //declarar pato
@@ -276,24 +276,8 @@ int main(void)
                 if (!cacadorCollision) {
                     cacadorPos = NewPos2;
                 }
-    
-            //----------------------------------------------------------------------------------
-            //Colisão pato e caçador
-            
-            if(CheckCollisionRecs(cacadorrec, patorec)){  // Verificar colisão entre o caçador e o pato
-                GameOver = 1;// Jogo termina
-                PlaySound(sounddefeat); //Som de derrota
-            }
-            else
-            {
-                if (IsKeyPressed(KEY_R)) // Reiniciar o jogo ao pressionar a tecla R
-                {
-                    cord = (Vector2){64, 600};
-                    cacadorPos = (Vector2){1152,60};
-                    GameOver = 0;
-                }
-            }
 
+        //----------------------------------------------------------------------------------
         // Verificar colisão com os ovos
         // Colisão com ovos
 
@@ -320,6 +304,25 @@ int main(void)
             DrawTexture(victory, 0, 0, RAYWHITE);
             DrawTexture(recomecar, 320, 200, RAYWHITE);
         }
+            //----------------------------------------------------------------------------------
+            //Colisão pato e caçador
+            
+            if(CheckCollisionRecs(cacadorrec, patorec)){  // Verificar colisão entre o caçador e o pato
+                GameOver = 1;// Jogo termina
+                PlaySound(sounddefeat); //Som de derrota
+            }
+            else
+            {
+                if (IsKeyPressed(KEY_R)) // Reiniciar o jogo ao pressionar a tecla R
+                {
+                    cord = (Vector2){64, 600};
+                    cacadorPos = (Vector2){1152,60};
+                    GameOver = 0;
+                    newGame = 1;
+                }
+            }
+
+        
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -379,7 +382,8 @@ int main(void)
     CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL
     //--------------------------------------------------------------------------------------
-
-    return 0;
+    }
 }
+    return 0;
+
 }
