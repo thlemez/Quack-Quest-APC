@@ -39,8 +39,6 @@ Vector2 posicao_ovos[NUM_OVOS] = {
 
 int main(void)
 {
-    int newGame = 1;
-    while(newGame){
     //------------------------------------------------------------------------------------
     Texture2D lago; //declarar lago
     Texture2D pato; //declarar pato
@@ -310,19 +308,22 @@ int main(void)
             if(CheckCollisionRecs(cacadorrec, patorec)){  // Verificar colisão entre o caçador e o pato
                 GameOver = 1;// Jogo termina
                 PlaySound(sounddefeat); //Som de derrota
+            
             }
             else
             {
-                if (IsKeyPressed(KEY_R)) // Reiniciar o jogo ao pressionar a tecla R
-                {
+                if (IsKeyPressed(KEY_R)) {
                     cord = (Vector2){64, 600};
-                    cacadorPos = (Vector2){1152,60};
+                    cacadorPos = (Vector2){1152, 60};
                     GameOver = 0;
-                    newGame = 1;
-                }
+                    Score = 0;
+                    ovos_coletados = 0;
+                    // Reinicializar outras variáveis necessárias
+                
+                    }
+                
             }
-
-        
+    }
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -341,7 +342,7 @@ int main(void)
             for (int i = 0; i < NUM_OVOS; i++){
                 if (!ovos[i].coletado)
                 {
-                    DrawTextureEx(ovo, ovos[i].pos, 0.0f, OvoScale, WHITE);
+                    DrawTextureEx(ovo, posicao_ovos[i], 0.0f, OvoScale, WHITE);
                 }
             }
             // Desenhar score atual
@@ -352,7 +353,7 @@ int main(void)
                 if(GameOver == 2){
                     DrawTexture(victory, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
                 }
-    }
+        }
     
         else{
             ClearBackground(BLACK);
@@ -367,7 +368,7 @@ int main(void)
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
-
+    
     // Desinicialização
     //--------------------------------------------------------------------------------------
     UnloadTexture(lago); // Descarregar textura do lago
@@ -382,8 +383,8 @@ int main(void)
     CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL
     //--------------------------------------------------------------------------------------
-    }
-}
+    
+
     return 0;
 
 }
