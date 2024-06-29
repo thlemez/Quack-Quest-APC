@@ -10,7 +10,7 @@
 #define pedrawidth 64
 #define pedraheight 60
 #define NUM_OVOS 30
-//#define MAX_FASES 3
+#define MAX_FASES 3
 
 //------------------------------------------------------------------------------------
    //Structs
@@ -20,7 +20,38 @@
     } Ovo;
 
 //------------------------------------------------------------------------------------
+//Ovos
+int fase = 1;
+int ovos_coletados = 0;
 
+// Array para armazenar os ovos
+    Ovo ovos[NUM_OVOS];
+
+// Função para inicializar ovos garantindo que não nasçam sobre pedras
+void InicializarOvos(Vector2 *posicao_pedras, int num_pedras)
+{
+    for (int i = 0; i < NUM_OVOS; i++)
+    {
+        bool colisao;
+        do
+        {
+            colisao = false;
+            ovos[i].pos = (Vector2){GetRandomValue(0, 1280 - 20), GetRandomValue(0, 720 - 20)};
+            ovos[i].coletado = false;
+            Rectangle ovorec = {ovos[i].pos.x, ovos[i].pos.y, 20, 20};
+
+            for (int j = 0; j < num_pedras; j++)
+            {
+                Rectangle pedrarec = {posicao_pedras[j].x, posicao_pedras[j].y, pedrawidth, pedraheight};
+                if (CheckCollisionRecs(ovorec, pedrarec))
+                {
+                    colisao = true;
+                    break;
+                }
+            }
+        } while (colisao);
+    }
+}
 
 
 int main(void)
@@ -32,21 +63,21 @@ int main(void)
     Texture2D ovo; //declarar ovo
     Texture2D pedra; //declarar pedra
     Texture2D defeat; //declarar derrota
-    //Texture2D victory; //declarar victory
+    Texture2D victory; //declarar victory
 
     Sound sounddefeat;
-    //Sound soundwin;
+    Sound soundwin;
     //------------------------------------------------------------------------------------
 
     const int screenWidth = 1280;
     const int screenHeight = 720;
     int GameOver = 0;
-    //int fase = 1;
-    //int ovos_coletados = 0;
+    int Score = 0;
+    int highScore = 0;
 
     Vector2 cord = {64, 600};
 
-    /*Vector2 posicao_pedraM1[] = {
+    Vector2 posicao_pedraM1[NUM_PEDRASM1] = {
         {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
         {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
         {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
@@ -56,7 +87,7 @@ int main(void)
         {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
         {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
     };
-    */
+    
     Vector2 posicao_pedraM2[NUM_PEDRASM2] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {320,0}, {384,0}, {448,0}, {512, 0}, {576,0},
         {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0}, {1152,0},
@@ -74,7 +105,7 @@ int main(void)
         {448,660}, {512,660}, {576,660}, {704,660}, {768,660}, {832,660}, {896,660},
         {960,660}, {1024,660}, {1088,660}, {1216,180}, {1152,660}, {1216,660}
     };
-    /*
+    
     Vector2 posicao_pedraM3[NUM_PEDRASM3] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {384,0}, {448,0}, {512,0}, {576,0}, 
         {640,0}, {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0},
@@ -91,37 +122,8 @@ int main(void)
         {640,600}, {1216,600}, {0,660}, {64,660}, {128, 660}, {192,660}, {256,660}, 
         {384,660}, {448,660}, {512,660}, {576,660}, {640,660}, {704,660}, {768,660}, {832,660}, {896,660}, {960,660}, {1024,660}, {1152,660}, {1216,660}
     };
-    */
-    //------------------------------------------------------------------------------------
-    // Array para armazenar os ovos
-    Ovo ovos[NUM_OVOS];
-
-    // Função para inicializar ovos garantindo que não nasçam sobre pedras
-    void InicializarOvosM2();
-    {
-        for (int i = 0; i < NUM_OVOS; i++)
-        {
-            bool colisao;
-            do
-            {
-                colisao = false;
-                ovos[i].pos = (Vector2){GetRandomValue(0, screenWidth - 20), GetRandomValue(0, screenHeight - 20)};
-                ovos[i].coletado = false;
-                Rectangle ovorec = {ovos[i].pos.x, ovos[i].pos.y, 20, 20};
-
-                for (int j = 0; j < NUM_PEDRASM2; j++)
-                {
-                    Rectangle pedrarecM2 = {posicao_pedraM2[j].x, posicao_pedraM2[j].y, pedrawidth, pedraheight};
-                    if (CheckCollisionRecs(ovorec, pedrarecM2))
-                    {
-                        colisao = true;
-                        break;
-                    }
-                }
-            } while (colisao);
-        }
-    }
     
+    //------------------------------------------------------------------------------------
     // Direções de movimento do pato e do caçador
     bool pato_cima = false;
     bool pato_baixo = false;
@@ -136,10 +138,10 @@ int main(void)
     SetTargetFPS(60);
 
     sounddefeat = LoadSound("audio/fiasco-154915.mp3");
-    //soundwin = LoadSound("audio/Victory.mp3");
+    soundwin = LoadSound("audio/Victory.mp3");
 
     defeat = LoadTexture("texture/defeat.png");  //Link imagem de derrotado
-    //win = LoadTexture("texture/victory.png");   //Link imagem de vitória
+    victory = LoadTexture("texture/victory.png");   //Link imagem de vitória
     lago = LoadTexture("texture/lago.png");      //Link imagem de lago
     pato = LoadTexture("texture/pato.png");   //Link imagem de pato
     cacador = LoadTexture("texture/cacadorpng.png"); //Link imagem de caçador
@@ -299,6 +301,65 @@ int main(void)
             }
         }
 
+        // Verificar colisão com os ovos
+        for (int i = 0; i < NUM_OVOS; i++)
+        {
+            if (!ovos[i].coletado)
+            {
+                Rectangle ovorec = { ovos[i].pos.x, ovos[i].pos.y, 20, 20 };
+                if (CheckCollisionRecs(patorec, ovorec))
+                {
+                    ovos[i].coletado = true;
+                    Score += 10; // Aumenta o score ao coletar um ovo
+                    ovos_coletados++;
+                }
+            }
+        }
+
+                if(Score > highScore){
+                    highScore = Score;
+                }
+
+        // Verificar se todos os ovos foram coletados
+        if (ovos_coletados >= NUM_OVOS)
+        {
+            fase++;
+            if (fase > MAX_FASES)
+            {
+                // Jogo finalizado
+                GameOver = 2; // Vitória
+                PlaySound(soundwin); // Som de vitória
+            }
+            else
+            {
+                // Passar para a próxima fase
+                ovos_coletados = 0;
+
+                Vector2 *posicao_pedras_atual;
+                int num_pedras_atual;
+
+                if (fase == 2)
+                {
+                    posicao_pedras_atual = posicao_pedraM2;
+                    num_pedras_atual = NUM_PEDRASM2;
+                }
+                else if (fase == 3)
+                {
+                    posicao_pedras_atual = posicao_pedraM3;
+                    num_pedras_atual = NUM_PEDRASM3;
+                }
+                else
+                {
+                    posicao_pedras_atual = posicao_pedraM1;
+                    num_pedras_atual = NUM_PEDRASM1;
+                }
+
+                InicializarOvos(posicao_pedras_atual, num_pedras_atual); // Reposicionar os ovos para o novo mapa
+                cord = (Vector2){64, 600}; // Reiniciar a posição do pato
+                cacadorPos = (Vector2){1152,60}; // Reiniciar a posição do caçador
+            }
+        }
+
         
     }
 
@@ -323,7 +384,16 @@ int main(void)
                     DrawTexture(ovo, ovos[i].pos.x, ovos[i].pos.y, WHITE);
                 }
             }
-        }
+            // Desenhar score atual
+            DrawText(TextFormat("Score: %d", Score), 10, 10, 20, BLACK);
+            // Desenhar high score
+            DrawText(TextFormat("High Score: %d", highScore), 20, 50, 20, BLACK);
+
+                if(GameOver == 2){
+                    DrawTexture(victory, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
+                }
+    }
+        
         else{
             DrawTexture(defeat, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
         }
