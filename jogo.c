@@ -1,5 +1,6 @@
 #include "include/raylib.h"
 #include "include/lemes.h"
+#include <stdlib.h> // para numeros aleatorios
 
 #define NUM_PEDRASM1 73
 #define NUM_PEDRASM2 109
@@ -14,7 +15,7 @@ int main(void)
     //------------------------------------------------------------------------------------
     Texture2D lago; //declarar lago
     Texture2D pato; //declarar pato
-    //Texture2D cacador; //declarar caçador
+    Texture2D cacador; //declarar caçador
     //Texture2D ovo; //declarar ovo
     Texture2D pedra; //declarar pedra
     //Texture2D defeat; //declarar derrota
@@ -27,10 +28,10 @@ int main(void)
     const int screenWidth = 1280;
     const int screenHeight = 720;
 
-    Vector2 cord = { (float)screenWidth/2, (float)screenHeight/2 };
+    Vector2 cord = {64, 600};
+    Vector2 cord_cacador = {1152,60};
 
     Vector2 posicao_pedraM1[] = {
-
         {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
         {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
         {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
@@ -39,8 +40,8 @@ int main(void)
         {640, 120}, {704, 0}, {768, 0}, {832, 0}, {896, 0}, {960, 0}, {1024, 0}, {1088, 0}, {1152, 0}, {1216, 0}, {1280, 0}, 
         {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
         {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
-
     };
+
     Vector2 posicao_pedraM2[NUM_PEDRASM2] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {320,0}, {384,0}, {448,0}, {512, 0}, {576,0},
         {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0}, {1152,0},
@@ -58,7 +59,8 @@ int main(void)
         {448,660}, {512,660}, {576,660}, {704,660}, {768,660}, {832,660}, {896,660},
         {960,660}, {1024,660}, {1088,660}, {1216,180}, {1152,660}, {1216,660}
     };
-    Vector2 posicao_pedraM3[] = {
+
+    Vector2 posicao_pedraM3[NUM_PEDRASM3] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {384,0}, {448,0}, {512,0}, {576,0}, 
         {640,0}, {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0},
         {1152,0}, {1216,0}, {0,60}, {256,60}, {384,60}, {1216,60}, {0,120}, {128,120},
@@ -73,11 +75,9 @@ int main(void)
         {832,540}, {1024,540}, {1088,540}, {1216,540}, {0,600}, {256,600}, {384,600}, 
         {640,600}, {1216,600}, {0,660}, {64,660}, {128, 660}, {192,660}, {256,660}, 
         {384,660}, {448,660}, {512,660}, {576,660}, {640,660}, {704,660}, {768,660}, {832,660}, {896,660}, {960,660}, {1024,660}, {1152,660}, {1216,660}
-        };
+    };
 
-    
-
-    //Direções de movimento do pato e do caçador
+    // Direções de movimento do pato e do caçador
     bool pato_cima = false;
     bool pato_baixo = false;
     bool pato_direita = true;
@@ -93,18 +93,22 @@ int main(void)
     //sounddefeat = LoadSound("audio/fiasco-154915.mp3");
     //soundwin = LoadSound("audio/Victory.mp3");
 
-    //defeat = LoadTexture("texture/defeat.png");  // Linkar img derrota
-    //victory = LoadTexture("texture/victory.png"); // Linkar img vitória
-    lago = LoadTexture("texture/lago.png");      // Linkar img lago
-    pato = LoadTexture("texture/pato.png");   // Linkar img pato
-    //cacador = LoadTexture("texture/cacadorpng.png"); // Linkar img caçador
-    //ovo = LoadTexture("texture/ovo.png");        // Linkar img ovo
-    pedra = LoadTexture("texture/pedra.png");    // Linkar img pedra
-    
-    //------------------------------------------------------------------------------------
+    //defeat = LoadTexture("texture/defeat.png");  //Link imagem de derrotado
+    //win = LoadTexture("texture/victory.png");   //Link imagem de vitória
+    lago = LoadTexture("texture/lago.png");      //Link imagem de lago
+    pato = LoadTexture("texture/pato.png");   //Link imagem de pato
+    cacador = LoadTexture("texture/cacadorpng.png"); //Link imagem de caçador
+    pedra = LoadTexture("texture/pedra.png");    //Link imagem de pedra
 
-    // Main game loop
-    while (!WindowShouldClose())    //Acabar o looping quando fechar a janela
+    // Posição inicial do caçador
+    Vector2 cacadorPos = { (float)screenWidth / 2, (float)screenHeight / 2 }; // Posição inicial do caçador
+
+    // Direção de movimento do caçador
+    Vector2 cacadorDir = { 1.0f, 0.0f }; // Direção inicial do caçador
+
+    int framesCounter = 0; // Contador de quadros para mudar a direção do caçador
+
+    while (!WindowShouldClose())    // Loop principal do jogo
     {
         // Update
         //----------------------------------------------------------------------------------
@@ -119,14 +123,14 @@ int main(void)
         }
         else if (IsKeyDown(KEY_W)){
             pato_cima = true;
-            pato_baixo = pato_esquerda = pato_direita = false;
+            pato_baixo = pato_direita = pato_esquerda = false;
         }
         else if (IsKeyDown(KEY_S)){
             pato_baixo = true;
             pato_cima = pato_direita = pato_esquerda = false;
         }
 
-        // Atualização das posições
+        // Atualiza a posição do pato
         Vector2 NewPos1 = cord; // Pato
 
         if (pato_direita) NewPos1.x += 1.2f;
@@ -134,26 +138,26 @@ int main(void)
         if (pato_cima) NewPos1.y -= 1.2f;
         else if (pato_baixo) NewPos1.y += 1.2f;
 
-        // Verificar limites da janela (teletransporte)
+        // Verificar limites da janela (teleporte)
         if (NewPos1.x > screenWidth + 50) NewPos1.x = 0;
         else if (NewPos1.x < -50) NewPos1.x = screenWidth;
         if (NewPos1.y > screenHeight + 50) NewPos1.y = 0;
         else if (NewPos1.y < -50) NewPos1.y = screenHeight;
 
-        // struct do retangulo invisivel q fica ao redor do pato
+        // Retângulo de delimitação do pato
         Rectangle patorec = {
-        cord.x, 
-        cord.y,
-        patoheight,
-        patowidth
+            cord.x,
+            cord.y,
+            patoheight,
+            patowidth
         };
 
-        // Atualizar a posição do pato
+        // Atualiza a posição do retângulo de delimitação do pato
         patorec.x = NewPos1.x;
         patorec.y = NewPos1.y;
 
+        // Verificar colisão com obstáculos
         bool collision = false;
-        //struct do retangulo invisivel q fica ao redor da pedra e loop q detecta colisao entre os dois rentanfulos : pedra e pato 
         for (int i = 0; i < NUM_PEDRASM2; i++) {
             Rectangle pedrarecM2 = {
                 posicao_pedraM2[i].x,
@@ -164,13 +168,71 @@ int main(void)
 
             if (CheckCollisionRecs(patorec, pedrarecM2)) {
                 collision = true;
-                break; // sair do loop se houver colisão
+                break; // Sai do loop se houver uma colisão
             }
         }
 
-        // Se não houver colisão, atualizar a posição do pato
+        // Se não houver colisão, atualiza a posição do pato
         if (!collision) {
             cord = NewPos1;
+        }
+
+        // Lógica de movimento do caçador
+        framesCounter++;
+        if (framesCounter > 60) {
+            framesCounter = 0;
+            // Mudar aleatoriamente a direção do caçador a cada segundo
+            int dir = GetRandomValue(0, 3);
+            switch (dir) {
+                case 0: cacadorDir = (Vector2){ 1.0f, 0.0f }; break; // Direita
+                case 1: cacadorDir = (Vector2){ -1.0f, 0.0f }; break; // Esquerda
+                case 2: cacadorDir = (Vector2){ 0.0f, 1.0f }; break; // Baixo
+                case 3: cacadorDir = (Vector2){ 0.0f, -1.0f }; break; // Cima
+            }
+        }
+
+        // Atualiza a posição do caçador
+        Vector2 NewPos2 = cacadorPos;
+        NewPos2.x += cacadorDir.x * 1.0f;
+        NewPos2.y += cacadorDir.y * 1.0f;
+
+        // Verificar limites da janela para o caçador (teleporte)
+        if (NewPos2.x > screenWidth + 50) NewPos2.x = 0;
+        else if (NewPos2.x < -50) NewPos2.x = screenWidth;
+        if (NewPos2.y > screenHeight + 50) NewPos2.y = 0;
+        else if (NewPos2.y < -50) NewPos2.y = screenHeight;
+
+        // Retângulo de delimitação do caçador
+        Rectangle cacadorrec = {
+            cacadorPos.x,
+            cacadorPos.y,
+            patoheight,
+            patowidth
+        };
+
+        // Atualiza a posição do retângulo de delimitação do caçador
+        cacadorrec.x = NewPos2.x;
+        cacadorrec.y = NewPos2.y;
+
+        // Verificar colisão com obstáculos para o caçador
+        bool cacadorCollision = false;
+        for (int i = 0; i < NUM_PEDRASM2; i++) {
+            Rectangle pedrarecM2 = {
+                posicao_pedraM2[i].x,
+                posicao_pedraM2[i].y,
+                pedrawidth,
+                pedraheight
+            };
+
+            if (CheckCollisionRecs(cacadorrec, pedrarecM2)) {
+                cacadorCollision = true;
+                break; // Sai do loop se houver uma colisão
+            }
+        }
+
+        // Se não houver colisão, atualiza a posição do caçador
+        if (!cacadorCollision) {
+            cacadorPos = NewPos2;
         }
 
         //----------------------------------------------------------------------------------
@@ -182,30 +244,26 @@ int main(void)
         ClearBackground(RAYWHITE);
 
         DrawTexture(lago, 0, 0, WHITE);
-
         DrawTextureEx(pato, cord, 0.0, 0.05, WHITE);
+        DrawTextureEx(cacador, cacadorPos, 0.0, 0.05, WHITE);
 
-        // for(int i = 0; i <NUM_PEDRASM1; i++){DrawtextureEx(pedra, posicao_pedraM1[i], 0.0, 0.06);} // para geracao do mapa 1
-
-         for (int i = 0; i < NUM_PEDRASM2; i++) {
+        for (int i = 0; i < NUM_PEDRASM2; i++) {
             DrawTextureEx(pedra, posicao_pedraM2[i], 0.0, 0.06, WHITE);
         }
-
-        // for(int i = 0; i <NUM_PEDRASM3; i++){DrawtextureEx(pedra, posicao_pedraM3[i], 0.0, 0.06);} // para geracao do mapa 3
 
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
-    
-    // De-Initialization
+
+    // Desinicialização
     //--------------------------------------------------------------------------------------
-    UnloadTexture(lago); // Descarregar textura lago
-    UnloadTexture(pato); // Descarregar textura pato
-    UnloadTexture(pedra);
-    // Fechar dispositivo de áudio
+    UnloadTexture(lago); // Descarregar textura do lago
+    UnloadTexture(pato); // Descarregar textura do pato
+    UnloadTexture(cacador); // Descarregar textura do caçador
+    UnloadTexture(pedra); // Descarregar textura da pedra
     CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL
     //--------------------------------------------------------------------------------------
-    
+
     return 0;
 }
