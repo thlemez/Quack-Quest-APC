@@ -9,16 +9,16 @@
 #define patowidth 40
 #define pedrawidth 64
 #define pedraheight 60
-//#define NUM_OVOS 30
+#define NUM_OVOS 30
 //#define MAX_FASES 3
 
 //------------------------------------------------------------------------------------
-/*   //Structs
+   //Structs
     typedef struct {
         Vector2 pos;
         bool coletado;
     } Ovo;
-*/
+
 //------------------------------------------------------------------------------------
 
 
@@ -29,7 +29,7 @@ int main(void)
     Texture2D lago; //declarar lago
     Texture2D pato; //declarar pato
     Texture2D cacador; //declarar caçador
-    //Texture2D ovo; //declarar ovo
+    Texture2D ovo; //declarar ovo
     Texture2D pedra; //declarar pedra
     Texture2D defeat; //declarar derrota
     //Texture2D victory; //declarar victory
@@ -46,7 +46,7 @@ int main(void)
 
     Vector2 cord = {64, 600};
 
-    Vector2 posicao_pedraM1[] = {
+    /*Vector2 posicao_pedraM1[] = {
         {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
         {64, 480},  {0, 480}, {64, 480}, {128, 480}, {0, 540}, {0, 600}, {0, 660}, 
         {0, 720}, {1216, 0}, {1216, 60}, {1216, 120}, {1216, 180}, {1216, 240}, {1216, 240}, 
@@ -56,7 +56,7 @@ int main(void)
         {64, 660}, {128, 660}, {192, 660}, {256, 660}, {320, 660}, {384, 660}, {448, 660}, {512, 660}, {576, 660}, {640, 660}, 
         {640, 660}, {640, 600}, {704, 660}, {768, 660}, {832, 660}, {896, 660}, {960, 660}, {1024, 660},{1088, 660}, {1152, 660}, {1216, 660}, {1280, 660}
     };
-
+    */
     Vector2 posicao_pedraM2[NUM_PEDRASM2] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {320,0}, {384,0}, {448,0}, {512, 0}, {576,0},
         {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0}, {1152,0},
@@ -74,7 +74,7 @@ int main(void)
         {448,660}, {512,660}, {576,660}, {704,660}, {768,660}, {832,660}, {896,660},
         {960,660}, {1024,660}, {1088,660}, {1216,180}, {1152,660}, {1216,660}
     };
-
+    /*
     Vector2 posicao_pedraM3[NUM_PEDRASM3] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {384,0}, {448,0}, {512,0}, {576,0}, 
         {640,0}, {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0},
@@ -91,13 +91,13 @@ int main(void)
         {640,600}, {1216,600}, {0,660}, {64,660}, {128, 660}, {192,660}, {256,660}, 
         {384,660}, {448,660}, {512,660}, {576,660}, {640,660}, {704,660}, {768,660}, {832,660}, {896,660}, {960,660}, {1024,660}, {1152,660}, {1216,660}
     };
-
+    */
     //------------------------------------------------------------------------------------
     // Array para armazenar os ovos
-    //Ovo ovos[NUM_OVOS];
+    Ovo ovos[NUM_OVOS];
 
     // Função para inicializar ovos garantindo que não nasçam sobre pedras
-    /*void InicializarOvosM2();
+    void InicializarOvosM2();
     {
         for (int i = 0; i < NUM_OVOS; i++)
         {
@@ -121,7 +121,7 @@ int main(void)
             } while (colisao);
         }
     }
-    */
+    
     // Direções de movimento do pato e do caçador
     bool pato_cima = false;
     bool pato_baixo = false;
@@ -132,7 +132,7 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "Quack-Quest"); // Abrir janela
 
-    //InitAudioDevice();
+    InitAudioDevice();
     SetTargetFPS(60);
 
     sounddefeat = LoadSound("audio/fiasco-154915.mp3");
@@ -144,7 +144,7 @@ int main(void)
     pato = LoadTexture("texture/pato.png");   //Link imagem de pato
     cacador = LoadTexture("texture/cacadorpng.png"); //Link imagem de caçador
     pedra = LoadTexture("texture/pedra.png");    //Link imagem de pedra
-    //ovo = LoadTexture("texture/ovo.png");
+    ovo = LoadTexture("texture/ovo.png");
 
     // Posição inicial do caçador
     Vector2 cacadorPos = {1152,60}; // Posição inicial do caçador
@@ -317,12 +317,12 @@ int main(void)
                 DrawTextureEx(pedra, posicao_pedraM2[i], 0.0, 0.05, WHITE);
             }
             // Desenhar os ovos
-            /*for (int i = 0; i < NUM_OVOS; i++){
+            for (int i = 0; i < NUM_OVOS; i++){
                 if (!ovos[i].coletado)
                 {
                     DrawTexture(ovo, ovos[i].pos.x, ovos[i].pos.y, WHITE);
                 }
-            }*/
+            }
         }
         else{
             DrawTexture(defeat, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
@@ -339,8 +339,8 @@ int main(void)
     UnloadTexture(cacador); // Descarregar textura do caçador
     UnloadTexture(pedra); // Descarregar textura da pedra
     UnloadTexture(defeat);
-    //UnloadTexture(ovo);
-    //CloseAudioDevice();
+    UnloadTexture(ovo);
+    CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL
     //--------------------------------------------------------------------------------------
 
