@@ -29,7 +29,6 @@ int main(void)
     const int screenHeight = 720;
 
     Vector2 cord = {64, 600};
-    Vector2 cord_cacador = {1152,60};
 
     Vector2 posicao_pedraM1[] = {
         {0, 0}, {0, 60}, {0, 120}, {0, 180}, {0, 240}, {0, 300}, {64, 360}, 
@@ -101,7 +100,7 @@ int main(void)
     pedra = LoadTexture("texture/pedra.png");    //Link imagem de pedra
 
     // Posição inicial do caçador
-    Vector2 cacadorPos = { (float)screenWidth / 2, (float)screenHeight / 2 }; // Posição inicial do caçador
+    Vector2 cacadorPos = {1152,60}; // Posição inicial do caçador
 
     // Direção de movimento do caçador
     Vector2 cacadorDir = { 1.0f, 0.0f }; // Direção inicial do caçador
@@ -177,11 +176,11 @@ int main(void)
             cord = NewPos1;
         }
 
-        // Lógica de movimento do caçador
+       // Lógica de movimento do caçador
         framesCounter++;
-        if (framesCounter > 60) {
+        if (framesCounter > 180) {  // Muda a direção do caçador a cada 4 segundos (240 frames)
             framesCounter = 0;
-            // Mudar aleatoriamente a direção do caçador a cada segundo
+            // Mudar aleatoriamente a direção do caçador a cada 4 segundos
             int dir = GetRandomValue(0, 3);
             switch (dir) {
                 case 0: cacadorDir = (Vector2){ 1.0f, 0.0f }; break; // Direita
