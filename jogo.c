@@ -11,6 +11,9 @@
 #define pedraheight 60
 #define NUM_OVOS 30
 #define MAX_FASES 3
+#define ovoHeight 20
+#define ovoWidth 20
+#define OvoScale 0.03f
 
 //------------------------------------------------------------------------------------
    //Structs
@@ -28,28 +31,26 @@ int ovos_coletados = 0;
     Ovo ovos[NUM_OVOS];
 
 // Função para inicializar ovos garantindo que não nasçam sobre pedras
-void InicializarOvos(Vector2 *posicao_pedras, int num_pedras)
-{
-    for (int i = 0; i < NUM_OVOS; i++)
-    {
-        bool colisao;
-        do
-        {
-            colisao = false;
-            ovos[i].pos = (Vector2){GetRandomValue(0, 1280 - 20), GetRandomValue(0, 720 - 20)};
+void InicializarOvos(Vector2 *posicao_pedras, int num_pedras) {
+    for (int i = 0; i < NUM_OVOS; i++) {
+        bool pos_valida = false;
+        while (!pos_valida) {
+            pos_valida = true;
+            ovos[i].pos.x = GetRandomValue(0, 1280 - ovoWidth);
+            ovos[i].pos.y = GetRandomValue(0, 720 - ovoHeight);
             ovos[i].coletado = false;
-            Rectangle ovorec = {ovos[i].pos.x, ovos[i].pos.y, 20, 20};
+            
+            Rectangle ovorec = { ovos[i].pos.x, ovos[i].pos.y, ovoWidth, ovoHeight };
 
-            for (int j = 0; j < num_pedras; j++)
-            {
-                Rectangle pedrarec = {posicao_pedras[j].x, posicao_pedras[j].y, pedrawidth, pedraheight};
-                if (CheckCollisionRecs(ovorec, pedrarec))
-                {
-                    colisao = true;
+            for (int j = 0; j < num_pedras; j++) {
+                Rectangle pedrarec = { posicao_pedras[j].x, posicao_pedras[j].y, pedrawidth, pedraheight };
+
+                if (CheckCollisionRecs(ovorec, pedrarec)) {
+                    pos_valida = false;
                     break;
                 }
             }
-        } while (colisao);
+        }
     }
 }
 
@@ -159,6 +160,7 @@ int main(void)
     while (!WindowShouldClose())    // Loop principal do jogo
     { 
     if(GameOver == 0){
+
         // Update
         //----------------------------------------------------------------------------------
         // Lógica de entrada (teclas pressionadas)
@@ -193,6 +195,9 @@ int main(void)
         if (NewPos1.y > screenHeight + 50) NewPos1.y = 0;
         else if (NewPos1.y < -50) NewPos1.y = screenHeight;
 
+        //----------------------------------------------------------------------------------
+        //Código de colisão Pedra e pato
+
         // Retângulo de delimitação do pato
         Rectangle patorec = {
             cord.x,
@@ -205,21 +210,52 @@ int main(void)
         patorec.x = NewPos1.x;
         patorec.y = NewPos1.y;
 
-        // Verificar colisão com obstáculos
-        bool collision = false;
-        for (int i = 0; i < NUM_PEDRASM2; i++) {
-            Rectangle pedrarecM2 = {
-                posicao_pedraM2[i].x,
-                posicao_pedraM2[i].y,
-                pedrawidth,
-                pedraheight
-            };
+                // Verificar colisão com obstáculos
+                bool collision1 = false;
+                for (int i = 0; i < NUM_PEDRASM1; i++) {
+                    Rectangle pedrarecM1 = {
+                        posicao_pedraM1[i].x,
+                        posicao_pedraM1[i].y,
+                        pedrawidth,
+                        pedraheight
+                    };
 
-            if (CheckCollisionRecs(patorec, pedrarecM2)) {
-                collision = true;
-                break; // Sai do loop se houver uma colisão
-            }
-        }
+                    //colisão na prática
+                    if (CheckCollisionRecs(patorec, pedrarecM1)) {
+                        collision1 = true;
+                        break; // Sai do loop se houver uma colisão
+                    }
+                }
+                bool collision2 = false;
+                for (int i = 0; i < NUM_PEDRASM2; i++) {
+                    Rectangle pedrarecM2 = {
+                        posicao_pedraM2[i].x,
+                        posicao_pedraM2[i].y,
+                        pedrawidth,
+                        pedraheight
+                    };
+
+                    //colisão na prática
+                    if (CheckCollisionRecs(patorec, pedrarecM2)) {
+                        collision2 = true;
+                        break; // Sai do loop se houver uma colisão
+                    }
+                }
+                bool collision3 = false;
+                for (int i = 0; i < NUM_PEDRASM3; i++) {
+                    Rectangle pedrarecM3 = {
+                        posicao_pedraM3[i].x,
+                        posicao_pedraM3[i].y,
+                        pedrawidth,
+                        pedraheight
+                    };
+
+                    //colisão na prática
+                    if (CheckCollisionRecs(patorec, pedrarecM3)) {
+                        collision3 = true;
+                        break; // Sai do loop se houver uma colisão
+                    }
+                }
 
         // Se não houver colisão, atualiza a posição do pato
         if (!collision) {
@@ -259,47 +295,47 @@ int main(void)
             patowidth
         };
 
-        // Atualiza a posição do retângulo de delimitação do caçador
-        cacadorrec.x = NewPos2.x;
-        cacadorrec.y = NewPos2.y;
+            // Atualiza a posição do retângulo de delimitação do caçador
+            cacadorrec.x = NewPos2.x;
+            cacadorrec.y = NewPos2.y;
 
-        // Verificar colisão com obstáculos para o caçador
-        bool cacadorCollision = false;
-        for (int i = 0; i < NUM_PEDRASM2; i++) {
-            Rectangle pedrarecM2 = {
-                posicao_pedraM2[i].x,
-                posicao_pedraM2[i].y,
-                pedrawidth,
-                pedraheight
-            };
+            // Verificar colisão com obstáculos para o caçador
+            bool cacadorCollision = false;
+            for (int i = 0; i < NUM_PEDRASM2; i++) {
+                Rectangle pedrarecM2 = {
+                    posicao_pedraM2[i].x,
+                    posicao_pedraM2[i].y,
+                    pedrawidth,
+                    pedraheight
+                };
 
-            if (CheckCollisionRecs(cacadorrec, pedrarecM2)) {
-                cacadorCollision = true;
-                break; // Sai do loop se houver uma colisão
+                if (CheckCollisionRecs(cacadorrec, pedrarecM2)) {
+                    cacadorCollision = true;
+                    break; // Sai do loop se houver uma colisão
+                }
             }
-        }
 
-        // Se não houver colisão, atualiza a posição do caçador
-        if (!cacadorCollision) {
-            cacadorPos = NewPos2;
-        }
+            // Se não houver colisão, atualiza a posição do caçador
+            if (!cacadorCollision) {
+                cacadorPos = NewPos2;
+            }
 
-        //----------------------------------------------------------------------------------
-        //Colisão pato e caçador
-        
-        if(CheckCollisionRecs(cacadorrec, patorec)){  // Verificar colisão entre o caçador e o pato
-            GameOver = 1;// Jogo termina
-            PlaySound(sounddefeat); //Som de derrota
-        }
-        else
-        {
-            if (IsKeyPressed(KEY_R)) // Reiniciar o jogo ao pressionar a tecla R
+            //----------------------------------------------------------------------------------
+            //Colisão pato e caçador
+            
+            if(CheckCollisionRecs(cacadorrec, patorec)){  // Verificar colisão entre o caçador e o pato
+                GameOver = 1;// Jogo termina
+                PlaySound(sounddefeat); //Som de derrota
+            }
+            else
             {
-                cord = (Vector2){64, 600};
-                cacadorPos = (Vector2){1152,60};
-                GameOver = 0;
+                if (IsKeyPressed(KEY_R)) // Reiniciar o jogo ao pressionar a tecla R
+                {
+                    cord = (Vector2){64, 600};
+                    cacadorPos = (Vector2){1152,60};
+                    GameOver = 0;
+                }
             }
-        }
 
         // Verificar colisão com os ovos
         for (int i = 0; i < NUM_OVOS; i++)
@@ -359,8 +395,6 @@ int main(void)
                 cacadorPos = (Vector2){1152,60}; // Reiniciar a posição do caçador
             }
         }
-
-        
     }
 
         // Draw
@@ -381,7 +415,7 @@ int main(void)
             for (int i = 0; i < NUM_OVOS; i++){
                 if (!ovos[i].coletado)
                 {
-                    DrawTexture(ovo, ovos[i].pos.x, ovos[i].pos.y, WHITE);
+                    DrawTextureEx(ovo, ovos[i].pos, 0.0f, OvoScale, WHITE);
                 }
             }
             // Desenhar score atual
@@ -409,7 +443,9 @@ int main(void)
     UnloadTexture(cacador); // Descarregar textura do caçador
     UnloadTexture(pedra); // Descarregar textura da pedra
     UnloadTexture(defeat);
+    UnloadTexture(victory);
     UnloadTexture(ovo);
+
     CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL
     //--------------------------------------------------------------------------------------
