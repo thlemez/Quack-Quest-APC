@@ -9,6 +9,19 @@
 #define patowidth 40
 #define pedrawidth 64
 #define pedraheight 60
+//#define NUM_OVOS 30
+//#define MAX_FASES 3
+
+//------------------------------------------------------------------------------------
+/*   //Structs
+    typedef struct {
+        Vector2 pos;
+        bool coletado;
+    } Ovo;
+*/
+//------------------------------------------------------------------------------------
+
+
 
 int main(void)
 {
@@ -18,15 +31,18 @@ int main(void)
     Texture2D cacador; //declarar caçador
     //Texture2D ovo; //declarar ovo
     Texture2D pedra; //declarar pedra
-    //Texture2D defeat; //declarar derrota
+    Texture2D defeat; //declarar derrota
     //Texture2D victory; //declarar victory
 
-    //Sound sounddefeat;
+    Sound sounddefeat;
     //Sound soundwin;
     //------------------------------------------------------------------------------------
 
     const int screenWidth = 1280;
     const int screenHeight = 720;
+    int GameOver = 0;
+    //int fase = 1;
+    //int ovos_coletados = 0;
 
     Vector2 cord = {64, 600};
 
@@ -76,6 +92,36 @@ int main(void)
         {384,660}, {448,660}, {512,660}, {576,660}, {640,660}, {704,660}, {768,660}, {832,660}, {896,660}, {960,660}, {1024,660}, {1152,660}, {1216,660}
     };
 
+    //------------------------------------------------------------------------------------
+    // Array para armazenar os ovos
+    //Ovo ovos[NUM_OVOS];
+
+    // Função para inicializar ovos garantindo que não nasçam sobre pedras
+    /*void InicializarOvosM2();
+    {
+        for (int i = 0; i < NUM_OVOS; i++)
+        {
+            bool colisao;
+            do
+            {
+                colisao = false;
+                ovos[i].pos = (Vector2){GetRandomValue(0, screenWidth - 20), GetRandomValue(0, screenHeight - 20)};
+                ovos[i].coletado = false;
+                Rectangle ovorec = {ovos[i].pos.x, ovos[i].pos.y, 20, 20};
+
+                for (int j = 0; j < NUM_PEDRASM2; j++)
+                {
+                    Rectangle pedrarecM2 = {posicao_pedraM2[j].x, posicao_pedraM2[j].y, pedrawidth, pedraheight};
+                    if (CheckCollisionRecs(ovorec, pedrarecM2))
+                    {
+                        colisao = true;
+                        break;
+                    }
+                }
+            } while (colisao);
+        }
+    }
+    */
     // Direções de movimento do pato e do caçador
     bool pato_cima = false;
     bool pato_baixo = false;
@@ -89,15 +135,16 @@ int main(void)
     //InitAudioDevice();
     SetTargetFPS(60);
 
-    //sounddefeat = LoadSound("audio/fiasco-154915.mp3");
+    sounddefeat = LoadSound("audio/fiasco-154915.mp3");
     //soundwin = LoadSound("audio/Victory.mp3");
 
-    //defeat = LoadTexture("texture/defeat.png");  //Link imagem de derrotado
+    defeat = LoadTexture("texture/defeat.png");  //Link imagem de derrotado
     //win = LoadTexture("texture/victory.png");   //Link imagem de vitória
     lago = LoadTexture("texture/lago.png");      //Link imagem de lago
     pato = LoadTexture("texture/pato.png");   //Link imagem de pato
     cacador = LoadTexture("texture/cacadorpng.png"); //Link imagem de caçador
     pedra = LoadTexture("texture/pedra.png");    //Link imagem de pedra
+    //ovo = LoadTexture("texture/ovo.png");
 
     // Posição inicial do caçador
     Vector2 cacadorPos = {1152,60}; // Posição inicial do caçador
@@ -108,7 +155,8 @@ int main(void)
     int framesCounter = 0; // Contador de quadros para mudar a direção do caçador
 
     while (!WindowShouldClose())    // Loop principal do jogo
-    {
+    { 
+    if(GameOver == 0){
         // Update
         //----------------------------------------------------------------------------------
         // Lógica de entrada (teclas pressionadas)
@@ -235,19 +283,49 @@ int main(void)
         }
 
         //----------------------------------------------------------------------------------
+        //Colisão pato e caçador
+        
+        if(CheckCollisionRecs(cacadorrec, patorec)){  // Verificar colisão entre o caçador e o pato
+            GameOver = 1;// Jogo termina
+            PlaySound(sounddefeat); //Som de derrota
+        }
+        else
+        {
+            if (IsKeyPressed(KEY_R)) // Reiniciar o jogo ao pressionar a tecla R
+            {
+                cord = (Vector2){64, 600};
+                cacadorPos = (Vector2){1152,60};
+                GameOver = 0;
+            }
+        }
+
+        
+    }
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
-
         DrawTexture(lago, 0, 0, WHITE);
-        DrawTextureEx(pato, cord, 0.0, 0.05, WHITE);
-        DrawTextureEx(cacador, cacadorPos, 0.0, 0.05, WHITE);
 
-        for (int i = 0; i < NUM_PEDRASM2; i++) {
-            DrawTextureEx(pedra, posicao_pedraM2[i], 0.0, 0.06, WHITE);
+        if(GameOver == 0){ // Se o jogo está ativo, desenhe normalmente
+            DrawTextureEx(pato, cord, 0.0, 0.05, WHITE);
+            DrawTextureEx(cacador, cacadorPos, 0.0, 0.05, WHITE);
+
+            for (int i = 0; i < NUM_PEDRASM2; i++) {
+                DrawTextureEx(pedra, posicao_pedraM2[i], 0.0, 0.05, WHITE);
+            }
+            // Desenhar os ovos
+            /*for (int i = 0; i < NUM_OVOS; i++){
+                if (!ovos[i].coletado)
+                {
+                    DrawTexture(ovo, ovos[i].pos.x, ovos[i].pos.y, WHITE);
+                }
+            }*/
+        }
+        else{
+            DrawTexture(defeat, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
         }
 
         EndDrawing();
@@ -260,7 +338,9 @@ int main(void)
     UnloadTexture(pato); // Descarregar textura do pato
     UnloadTexture(cacador); // Descarregar textura do caçador
     UnloadTexture(pedra); // Descarregar textura da pedra
-    CloseAudioDevice();
+    UnloadTexture(defeat);
+    //UnloadTexture(ovo);
+    //CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL
     //--------------------------------------------------------------------------------------
 
