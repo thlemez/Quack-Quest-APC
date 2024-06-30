@@ -16,18 +16,13 @@
 //------------------------------------------------------------------------------------
    //Structs
     typedef struct {
-        Vector2 pos;
-        bool coletado;
+        Vector2 pos; // Posição do ovo
+        bool coletado; // Flag que indica se o ovo foi coletado
     } Ovo;
 
 //------------------------------------------------------------------------------------
-    //Funções
-    void ResetarJogo();
-
-    
-//------------------------------------------------------------------------------------
 //Ovos
-int ovos_coletados = 0;
+int ovos_coletados = 0; // Contador de ovos coletados
 
 // Array para armazenar os ovos
     Ovo ovos[NUM_OVOS];
@@ -40,9 +35,9 @@ Vector2 posicao_ovos[NUM_OVOS] = {
     {704, 120}, {512, 360}, {192, 190}, {768, 420}, {640, 540}, {256, 600}, {448, 180},
     {832, 180}, {1024, 420}, {1088, 180}, {192, 480}, {576, 240}, {512, 540}, {1152, 540}, {320, 540},
     {64, 420}, {512, 60}, {832, 480}, {896, 360}, {1088, 360}, {1152, 120}, {384, 360}
-};
+}; // Posição dos ovos de forma manual
 
-    int NewGame = 1;
+    int NewGame = 1; // Flag para indicar se é um novo jogo
 
 int main(void)
 {
@@ -51,6 +46,9 @@ int main(void)
 
     
     //------------------------------------------------------------------------------------
+    //Textura e Sons
+
+    // Carrega as texturas e sons necessários para o jogo
     Texture2D lago; //declarar lago
     Texture2D pato; //declarar pato
     Texture2D cacador; //declarar caçador
@@ -63,14 +61,15 @@ int main(void)
     Sound sounddefeat;
     Sound soundwin;
     //------------------------------------------------------------------------------------
+    //Variáveis Globais e Constantes 
 
     const int screenWidth = 1280;
     const int screenHeight = 720;
-    int GameOver = 0;
-    int Score = 0;
-    int highScore = 0;
+    int GameOver = 0; // Flag para indicar se o jogo acabou
+    int Score = 0; // Pontuação atual do jogador
+    int highScore = 0; // Pontuação mais alta alcançada
 
-    Vector2 cord = {64, 600};
+    Vector2 cord = {64, 600};// Posição inicial do pato
 
     Vector2 posicao_pedraM2[NUM_PEDRASM2] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {320,0}, {384,0}, {448,0}, {512, 0}, {576,0},
@@ -88,7 +87,7 @@ int main(void)
         {0,660}, {64,660}, {128,660}, {192,660}, {256,660}, {320,660}, {384,660}, 
         {448,660}, {512,660}, {576,660}, {704,660}, {768,660}, {832,660}, {896,660},
         {960,660}, {1024,660}, {1088,660}, {1216,180}, {1152,660}, {1216,660}
-    };
+    }; // Posições iniciais dos obstáculos (pedras)
     
     //------------------------------------------------------------------------------------
     // Direções de movimento do pato e do caçador
@@ -98,22 +97,22 @@ int main(void)
     bool pato_esquerda = false;
 
     //--------------------------------------------------------------------------------------
-
-    InitWindow(screenWidth, screenHeight, "Quack-Quest"); // Abrir janela
+    // Inicialização
+    InitWindow(screenWidth, screenHeight, "Quack-Quest"); // Abre a janela do jogo
 
     InitAudioDevice();
     SetTargetFPS(60);
 
-    sounddefeat = LoadSound("audio/fiasco-154915.mp3");
-    soundwin = LoadSound("audio/Victory.mp3");
-    reiniciar = LoadTexture("texture/restart.png");
+    sounddefeat = LoadSound("audio/fiasco-154915.mp3"); //link audio derrota
+    soundwin = LoadSound("audio/Victory.mp3"); // link audio de vitoria
+    reiniciar = LoadTexture("texture/restart.png"); // link imagem de reiniciar
     defeat = LoadTexture("texture/defeat.png");  //Link imagem de derrotado
     victory = LoadTexture("texture/victory.png");   //Link imagem de vitória
     lago = LoadTexture("texture/lago.png");      //Link imagem de lago
     pato = LoadTexture("texture/pato.png");   //Link imagem de pato
     cacador = LoadTexture("texture/cacadorpng.png"); //Link imagem de caçador
     pedra = LoadTexture("texture/pedra.png");    //Link imagem de pedra
-    ovo = LoadTexture("texture/ovo.png");
+    ovo = LoadTexture("texture/ovo.png"); // Carrega a textura de ovo
 
     // Posição inicial do caçador
     Vector2 cacadorPos = {1152,60}; // Posição inicial do caçador1
@@ -130,12 +129,12 @@ int main(void)
     Vector2 cacadorDir5 = { 1.0f, 0.0f };// Direção inicial do caçador5
     Vector2 cacadorDir6 = { 1.0f, 0.0f };// Direção inicial do caçador6
 
-    int framesCounter  = 0; // Contador de quadros para mudar a direção do caçador
-    int framesCounter2 = 0;
-    int framesCounter3 = 0;
-    int framesCounter4 = 0;
-    int framesCounter5 = 0;
-    int framesCounter6 = 0;
+    int framesCounter  = 0; // Contador de quadros para mudar a direção do caçador1
+    int framesCounter2 = 0; // Contador de quadros para mudar a direção do caçador2
+    int framesCounter3 = 0; // Contador de quadros para mudar a direção do caçador3
+    int framesCounter4 = 0; // Contador de quadros para mudar a direção do caçador4
+    int framesCounter5 = 0; // Contador de quadros para mudar a direção do caçador5
+    int framesCounter6 = 0; // Contador de quadros para mudar a direção do caçador6
 
 
     while (!WindowShouldClose())    // Loop principal do jogo
@@ -166,6 +165,7 @@ int main(void)
         // Atualiza a posição do pato
         Vector2 NewPos1 = cord; // Pato
 
+        // Determinando a Velocidade feita pra cada direção do pato
         if (pato_direita) NewPos1.x += 1.2f;
         else if (pato_esquerda) NewPos1.x -= 1.2f;
         if (pato_cima) NewPos1.y -= 1.2f;
@@ -207,7 +207,7 @@ int main(void)
                         posicao_pedraM2[i].y,
                         pedrawidth,
                         pedraheight
-                    };
+                    }; // Retângulo de delimitação da pedra
 
                     //colisão na prática
                     if (CheckCollisionRecs(patorec, pedrarecM2)) {
@@ -595,14 +595,16 @@ int main(void)
                 ovoHeight
             };
 
+            // !ovos[i].coletado: Verifica se o ovo de índice i não foi coletado
+            // CheckCollisionRecs(patorec, ovoRec) Verifica se há colisão entre dois retângulos
             if (!ovos[i].coletado && CheckCollisionRecs(patorec, ovoRec)) {
-                ovos[i].coletado = true;
-                ovos_coletados++;
+                ovos[i].coletado = true; // bool de verificação
+                ovos_coletados++; // vai somando a quant. ovos coletados
                 Score += 10; // Aumenta a pontuação
             }
         }
     
-        // Update high score if current score exceeds it
+        // Atualiza o highscore caso seja maior q o score atual 
         if (Score > highScore) {
             highScore = Score;
         }
@@ -611,7 +613,7 @@ int main(void)
         
         if (ovos_coletados == NUM_OVOS) {
             GameOver = 2;
-            PlaySound(soundwin);
+            PlaySound(soundwin); // usar audio da vitoria
         }
             //----------------------------------------------------------------------------------
             //Condição de Derrota
@@ -621,17 +623,17 @@ int main(void)
                 CheckCollisionRecs(cacadorrec3, patorec) || 
                 CheckCollisionRecs(cacadorrec4, patorec) || 
                 CheckCollisionRecs(cacadorrec5, patorec) ||
-                CheckCollisionRecs(cacadorrec6, patorec)){  // Verificar colisão entre o caçador e o pato
+                CheckCollisionRecs(cacadorrec6, patorec)){  // Verificar colisão entre os caçadores e o pato
                 GameOver = 1;// Jogo termina
                 PlaySound(sounddefeat); //Som de derrota
-                NewGame = 1;
+                
 
             }
             
             else
             {
                 if (IsKeyPressed(KEY_R)) {
-                    NewGame = 1;
+                    NewGame = 1; // Verificador em 1 pra resetar a função, logo resetar o jogo
                     } 
             }
     }
@@ -639,18 +641,18 @@ int main(void)
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
-        DrawTexture(lago, 0, 0, WHITE);
+        ClearBackground(RAYWHITE); // Limpar o cenário
+        DrawTexture(lago, 0, 0, WHITE);// desenhar o lago
 
         if(GameOver == 0){ // Se o jogo está ativo, desenhe normalmente
-            DrawTextureEx(pato, cord, 0.0, 0.05, WHITE);
+            DrawTextureEx(pato, cord, 0.0, 0.05, WHITE); //Desenhar o pato
 
-            DrawTextureEx(cacador, cacadorPos, 0.0, 0.05, WHITE);
-            DrawTextureEx(cacador, cacadorPos2, 0.0, 0.05, WHITE);
-            DrawTextureEx(cacador, cacadorPos3, 0.0, 0.05, WHITE);
-            DrawTextureEx(cacador, cacadorPos4, 0.0, 0.05, WHITE);
-            DrawTextureEx(cacador, cacadorPos5, 0.0, 0.05, WHITE);
-            DrawTextureEx(cacador, cacadorPos6, 0.0, 0.05, WHITE);
+            DrawTextureEx(cacador, cacadorPos, 0.0, 0.05, WHITE); // desenha caçador1
+            DrawTextureEx(cacador, cacadorPos2, 0.0, 0.05, WHITE);// desenha caçador2
+            DrawTextureEx(cacador, cacadorPos3, 0.0, 0.05, WHITE);// desenha caçador3
+            DrawTextureEx(cacador, cacadorPos4, 0.0, 0.05, WHITE);// desenha caçador4
+            DrawTextureEx(cacador, cacadorPos5, 0.0, 0.05, WHITE);// desenha caçador5
+            DrawTextureEx(cacador, cacadorPos6, 0.0, 0.05, WHITE);// desenha caçador6
 
             for (int i = 0; i < NUM_PEDRASM2; i++) {
                 DrawTextureEx(pedra, posicao_pedraM2[i], 0.0, 0.05, WHITE);
@@ -668,13 +670,13 @@ int main(void)
             DrawText(TextFormat("High Score: %d", highScore), 10, 40, 20, BLACK);
 
         }
-
+        // Caso vitoria imprime imagem de vitoria e aparece a opção de reiniciar
         else if(ovos_coletados == NUM_OVOS){
             ClearBackground(BLACK);
             DrawTexture(victory, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
             DrawText("Press R to Restart", screenWidth/2 - MeasureText("Press R to Restart", 20)/2, screenHeight/2 + 40, 30, GREEN);
                 if(IsKeyPressed(KEY_R)){
-                    cord = (Vector2){64, 600};
+                    cord = (Vector2){64, 600};// Posição inicial do pato
                     cacadorPos = (Vector2){1152,60}; // Posição inicial do caçador1
                     cacadorPos2 = (Vector2){640,360}; // Posição inicial do caçador2
                     cacadorPos3 = (Vector2){1152,600}; // Posição inicial do caçador3
@@ -684,20 +686,20 @@ int main(void)
                     for (int i = 0; i < NUM_OVOS; i++) {
                         ovos[i].pos = posicao_ovos[i];
                         ovos[i].coletado = false;
-                    }
-                    GameOver = 0;
-                    Score = 0;
-                    ovos_coletados = 0;
+                    }//restart as variaves pra iniciar um novo jogo
+                    GameOver = 0;//restart as variaves pra iniciar um novo jogo
+                    Score = 0;//restart as variaves pra iniciar um novo jogo
+                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo
                
                 }
         }
-    
+        // Caso derrota imprime imagem de derrota e aparece a opção de reiniciar
         else{
             ClearBackground(BLACK);
             DrawTexture(defeat, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, RED);
             DrawTexture(reiniciar, screenWidth/2 - reiniciar.width/2, 450, RED);
                 if(IsKeyPressed(KEY_R)){
-                    cord = (Vector2){64, 600};
+                    cord = (Vector2){64, 600};// Posição inicial do pato
                     cacadorPos = (Vector2){1152,60}; // Posição inicial do caçador1
                     cacadorPos2 = (Vector2){640,360}; // Posição inicial do caçador2
                     cacadorPos3 = (Vector2){1152,600}; // Posição inicial do caçador3
@@ -707,13 +709,16 @@ int main(void)
                     for (int i = 0; i < NUM_OVOS; i++) {
                         ovos[i].pos = posicao_ovos[i];
                         ovos[i].coletado = false;
-                    }
-                    GameOver = 0;
-                    Score = 0;
-                    ovos_coletados = 0;
-           
+                    }//restart as variaves pra iniciar um novo jogo
+                    GameOver = 0;//restart as variaves pra iniciar um novo jogo
+                    Score = 0;//restart as variaves pra iniciar um novo jogo
+                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo
                 }
         }
+                // Se pressionar Q, fecha o jogo
+                if(IsKeyPressed(KEY_Q)){
+                    CloseWindow();
+                }
 
         EndDrawing();
         //----------------------------------------------------------------------------------
