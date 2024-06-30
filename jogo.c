@@ -51,12 +51,14 @@ int main(void)
     Texture2D lago; //declarar lago
     Texture2D pato; //declarar pato
     Texture2D cacador; //declarar caçador
+    Texture2D arqueiro;
     Texture2D ovo; //declarar ovo
     Texture2D pedra; //declarar pedra
     Texture2D defeat; //declarar derrota
     Texture2D victory; //declarar victory
     Texture2D reiniciar; //declarar reiniciar
 
+    Sound musica;
     Sound sounddefeat;
     Sound soundwin;
     //------------------------------------------------------------------------------------
@@ -102,6 +104,7 @@ int main(void)
     InitAudioDevice();
     SetTargetFPS(60);
 
+    musica = LoadSound("audio/musica.mp3");
     sounddefeat = LoadSound("audio/fiasco-154915.mp3"); //link audio derrota
     soundwin = LoadSound("audio/Victory.mp3"); // link audio de vitoria
     reiniciar = LoadTexture("texture/restart.png"); // link imagem de reiniciar
@@ -112,6 +115,7 @@ int main(void)
     cacador = LoadTexture("texture/cacadorpng.png"); //Link imagem de caçador
     pedra = LoadTexture("texture/pedra.png");    //Link imagem de pedra
     ovo = LoadTexture("texture/ovo.png"); // Carrega a textura de ovo
+    arqueiro = LoadTexure("texture/arq.PNG");
 
     // Posição inicial do caçador
     Vector2 cacadorPos = {1152,60}; // Posição inicial do caçador1
@@ -612,6 +616,7 @@ int main(void)
         
         if (ovos_coletados == NUM_OVOS) {
             GameOver = 2;
+            StopSound(musica);
             PlaySound(soundwin); // usar audio da vitoria
         }
             //----------------------------------------------------------------------------------
@@ -624,6 +629,7 @@ int main(void)
                 CheckCollisionRecs(cacadorrec5, patorec) ||
                 CheckCollisionRecs(cacadorrec6, patorec)){  // Verificar colisão entre os caçadores e o pato
                 GameOver = 1;// Jogo termina
+                StopSound(musica);
                 PlaySound(sounddefeat); //Som de derrota
                 
 
@@ -632,6 +638,7 @@ int main(void)
             else
             {
                 if (IsKeyPressed(KEY_R)) {
+                    ResumeSound(musica);
                     NewGame = 1; // Verificador em 1 pra resetar a função, logo resetar o jogo
                     } 
             }
@@ -688,8 +695,7 @@ int main(void)
                     }//restart as variaves pra iniciar um novo jogo
                     GameOver = 0;//restart as variaves pra iniciar um novo jogo
                     Score = 0;//restart as variaves pra iniciar um novo jogo
-                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo
-               
+                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo    
                 }
         }
         // Caso derrota imprime imagem de derrota e aparece a opção de reiniciar
@@ -719,6 +725,10 @@ int main(void)
                     CloseWindow();
                 }
 
+                if (!IsSoundPlaying(musica)) {
+                 PlaySound(musica); // Play the sound if it's not already playing
+                }
+
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
@@ -735,6 +745,7 @@ int main(void)
     UnloadTexture(reiniciar);
     UnloadSound(sounddefeat);
     UnloadSound(soundwin);
+    UnloadSound(musica);
 
     CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL

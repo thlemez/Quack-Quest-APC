@@ -211,5 +211,8 @@ Jogo inspirado no Pacman criado em linguagem c como trabalho final da disciplina
     Você pode se teletransportar pelo mapa passando das extremidades da tela
 
     ◦ Referências Bibliográficas:
+        - Canva
         - Pacman
+        - DuckHunt
         - Raylib.com
+        - Final Fantasy V
