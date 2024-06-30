@@ -51,7 +51,7 @@ int main(void)
     Texture2D lago; //declarar lago
     Texture2D pato; //declarar pato
     Texture2D cacador; //declarar caçador
-    Texture2D arqueiro;
+    Texture2D arqueiro; //declarar arqueiro
     Texture2D ovo; //declarar ovo
     Texture2D pedra; //declarar pedra
     Texture2D defeat; //declarar derrota
@@ -115,7 +115,7 @@ int main(void)
     cacador = LoadTexture("texture/cacadorpng.png"); //Link imagem de caçador
     pedra = LoadTexture("texture/pedra.png");    //Link imagem de pedra
     ovo = LoadTexture("texture/ovo.png"); // Carrega a textura de ovo
-    arqueiro = LoadTexure("texture/arq.PNG");
+    arqueiro = LoadTexture("texture/arq.PNG");
 
     // Posição inicial do caçador
     Vector2 cacadorPos = {1152,60}; // Posição inicial do caçador1
@@ -695,7 +695,8 @@ int main(void)
                     }//restart as variaves pra iniciar um novo jogo
                     GameOver = 0;//restart as variaves pra iniciar um novo jogo
                     Score = 0;//restart as variaves pra iniciar um novo jogo
-                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo    
+                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo
+                       
                 }
         }
         // Caso derrota imprime imagem de derrota e aparece a opção de reiniciar
@@ -718,6 +719,7 @@ int main(void)
                     GameOver = 0;//restart as variaves pra iniciar um novo jogo
                     Score = 0;//restart as variaves pra iniciar um novo jogo
                     ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo
+                    
                 }
         }
                 // Se pressionar Q, fecha o jogo
@@ -725,9 +727,9 @@ int main(void)
                     CloseWindow();
                 }
 
-                if (!IsSoundPlaying(musica)) {
-                 PlaySound(musica); // Play the sound if it's not already playing
-                }
+                 if (!IsSoundPlaying(musica)) {
+                  PlaySound(musica); // Play the sound if it's not already playing
+                 }
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -746,6 +748,7 @@ int main(void)
     UnloadSound(sounddefeat);
     UnloadSound(soundwin);
     UnloadSound(musica);
+    UnloadTexture(arqueiro);
 
     CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL
