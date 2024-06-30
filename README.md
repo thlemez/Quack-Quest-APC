@@ -89,6 +89,3 @@ make USE_EXTERNAL_GLFW=TRUE
 # or
 cmake -DUSE_EXTERNAL_GLFW=ON
 ```
-
-
-O jogo Quack Quest é um jogo com o objetivo:
