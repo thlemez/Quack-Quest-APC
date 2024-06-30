@@ -35,7 +35,7 @@ int ovos_coletados = 0;
 Vector2 posicao_ovos[NUM_OVOS] = {
     {640, 0}, {64, 60}, {384, 60}, {832, 60}, {1024, 60}, {1152, 60}, {576, 120}, {64, 180},
     {320, 180}, {704, 240}, {64, 300}, {192, 300}, {384, 300}, {832, 300}, {1024, 300}, {1216, 300},
-    {256, 420}, {448, 420}, {640, 420}, {1152, 420}, {64, 480}, {960, 480}, {384, 540}, {64, 600},
+    {256, 420}, {448, 420}, {640, 420}, {1152, 420}, {64, 480}, {960, 480}, {384, 540}, {330, 600},
     {448, 600}, {768, 600}, {896, 600}, {1088, 600}, {1152, 600}, {640, 660}, {640, 360}, {512, 240},
     {704, 120}, {512, 360}, {192, 190}, {768, 420}, {640, 540}, {256, 600}, {448, 180},
     {832, 180}, {1024, 420}, {1088, 180}, {192, 480}, {576, 240}, {512, 540}, {1152, 540}, {320, 540},
@@ -587,14 +587,18 @@ int main(void)
         // Colisão com ovos
 
         for (int i = 0; i < NUM_OVOS; i++) {
-            if (!ovos[i].coletado) {
-                Rectangle patorec = {cord.x, cord.y, patowidth, patoheight};
-                Rectangle ovorec = {posicao_ovos[i].x, posicao_ovos[i].y, ovoWidth, ovoHeight};
-                if (CheckCollisionRecs(patorec, ovorec)) {
-                    ovos[i].coletado = true;
-                    ovos_coletados++;
-                    Score += 10;
-                }
+            // Rectângulo de delimitação do ovo
+            Rectangle ovoRec = {
+                posicao_ovos[i].x,
+                posicao_ovos[i].y,
+                ovoWidth,
+                ovoHeight
+            };
+
+            if (!ovos[i].coletado && CheckCollisionRecs(patorec, ovoRec)) {
+                ovos[i].coletado = true;
+                ovos_coletados++;
+                Score += 10; // Aumenta a pontuação
             }
         }
     
@@ -620,11 +624,8 @@ int main(void)
                 CheckCollisionRecs(cacadorrec6, patorec)){  // Verificar colisão entre o caçador e o pato
                 GameOver = 1;// Jogo termina
                 PlaySound(sounddefeat); //Som de derrota
-                NewGame = 0;
+                NewGame = 1;
 
-            }
-            if(WindowShouldClose){
-                WindowShouldClose;
             }
             
             else
@@ -668,10 +669,27 @@ int main(void)
 
         }
 
-        else if(GameOver == 2){
+        else if(ovos_coletados == NUM_OVOS){
             ClearBackground(BLACK);
             DrawTexture(victory, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
-            DrawText("Press R to Restart", screenWidth/2 - MeasureText("Press R to Restart", 20)/2, screenHeight/2 + 40, 20, GREEN);
+            DrawText("Press R to Restart", screenWidth/2 - MeasureText("Press R to Restart", 20)/2, screenHeight/2 + 40, 30, GREEN);
+                if(IsKeyPressed(KEY_R)){
+                    cord = (Vector2){64, 600};
+                    cacadorPos = (Vector2){1152,60}; // Posição inicial do caçador1
+                    cacadorPos2 = (Vector2){640,360}; // Posição inicial do caçador2
+                    cacadorPos3 = (Vector2){1152,600}; // Posição inicial do caçador3
+                    cacadorPos4 = (Vector2){128,60}; // Posição inicial do caçador4
+                    cacadorPos5 = (Vector2){200, screenHeight/2}; // Posição inicial do caçador5
+                    cacadorPos6 = (Vector2){640, 530};
+                    for (int i = 0; i < NUM_OVOS; i++) {
+                        ovos[i].pos = posicao_ovos[i];
+                        ovos[i].coletado = false;
+                    }
+                    GameOver = 0;
+                    Score = 0;
+                    ovos_coletados = 0;
+               
+                }
         }
     
         else{
@@ -680,11 +698,20 @@ int main(void)
             DrawTexture(reiniciar, screenWidth/2 - reiniciar.width/2, 450, RED);
                 if(IsKeyPressed(KEY_R)){
                     cord = (Vector2){64, 600};
-                    cacadorPos = (Vector2){1152, 60};
+                    cacadorPos = (Vector2){1152,60}; // Posição inicial do caçador1
+                    cacadorPos2 = (Vector2){640,360}; // Posição inicial do caçador2
+                    cacadorPos3 = (Vector2){1152,600}; // Posição inicial do caçador3
+                    cacadorPos4 = (Vector2){128,60}; // Posição inicial do caçador4
+                    cacadorPos5 = (Vector2){200, screenHeight/2}; // Posição inicial do caçador5
+                    cacadorPos6 = (Vector2){640, 530};
+                    for (int i = 0; i < NUM_OVOS; i++) {
+                        ovos[i].pos = posicao_ovos[i];
+                        ovos[i].coletado = false;
+                    }
                     GameOver = 0;
                     Score = 0;
                     ovos_coletados = 0;
-                    NewGame = 1;
+           
                 }
         }
 
