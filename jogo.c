@@ -616,7 +616,7 @@ int main(void)
         
         if (ovos_coletados == NUM_OVOS) {
             GameOver = 2;
-            StopSound(musica);
+            StopSound;
             PlaySound(soundwin); // usar audio da vitoria
         }
             //----------------------------------------------------------------------------------
@@ -638,7 +638,7 @@ int main(void)
             else
             {
                 if (IsKeyPressed(KEY_R)) {
-                    ResumeSound(musica);
+                    PlaySound(musica);
                     NewGame = 1; // Verificador em 1 pra resetar a função, logo resetar o jogo
                     } 
             }
@@ -653,9 +653,9 @@ int main(void)
         if(GameOver == 0){ // Se o jogo está ativo, desenhe normalmente
             DrawTextureEx(pato, cord, 0.0, 0.05, WHITE); //Desenhar o pato
 
-            DrawTextureEx(cacador, cacadorPos, 0.0, 0.05, WHITE); // desenha caçador1
+            DrawTextureEx(arqueiro, cacadorPos, 0.0, 0.1, WHITE); // desenha caçador1
             DrawTextureEx(cacador, cacadorPos2, 0.0, 0.05, WHITE);// desenha caçador2
-            DrawTextureEx(cacador, cacadorPos3, 0.0, 0.05, WHITE);// desenha caçador3
+            DrawTextureEx(arqueiro, cacadorPos3, 0.0, 0.1, WHITE);// desenha caçador3
             DrawTextureEx(cacador, cacadorPos4, 0.0, 0.05, WHITE);// desenha caçador4
             DrawTextureEx(cacador, cacadorPos5, 0.0, 0.05, WHITE);// desenha caçador5
             DrawTextureEx(cacador, cacadorPos6, 0.0, 0.05, WHITE);// desenha caçador6
@@ -695,8 +695,7 @@ int main(void)
                     }//restart as variaves pra iniciar um novo jogo
                     GameOver = 0;//restart as variaves pra iniciar um novo jogo
                     Score = 0;//restart as variaves pra iniciar um novo jogo
-                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo
-                       
+                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo                      
                 }
         }
         // Caso derrota imprime imagem de derrota e aparece a opção de reiniciar
@@ -727,9 +726,9 @@ int main(void)
                     CloseWindow();
                 }
 
-                 if (!IsSoundPlaying(musica)) {
+                if (!IsSoundPlaying(musica)) {
                   PlaySound(musica); // Play the sound if it's not already playing
-                 }
+                }
 
         EndDrawing();
         //----------------------------------------------------------------------------------
