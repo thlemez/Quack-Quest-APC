@@ -42,9 +42,14 @@ Vector2 posicao_ovos[NUM_OVOS] = {
     {64, 420}, {512, 60}, {832, 480}, {896, 360}, {1088, 360}, {1152, 120}, {384, 360}
 };
 
+    int NewGame = 1;
+
 int main(void)
 {
+    if(NewGame == 1){
+        while(NewGame){
 
+    
     //------------------------------------------------------------------------------------
     Texture2D lago; //declarar lago
     Texture2D pato; //declarar pato
@@ -64,18 +69,9 @@ int main(void)
     int GameOver = 0;
     int Score = 0;
     int highScore = 0;
-    int ovos_coletados = 0;
-
-    // Direções de movimento do pato 
-    bool pato_cima = false;
-    bool pato_baixo = false;
-    bool pato_direita = true;
-    bool pato_esquerda = false;
-
-    Ovo ovos[NUM_OVOS];
 
     Vector2 cord = {64, 600};
-    
+
     Vector2 posicao_pedraM2[NUM_PEDRASM2] = {
         {0,0}, {64,0}, {128,0}, {192,0}, {256,0}, {320,0}, {384,0}, {448,0}, {512, 0}, {576,0},
         {704,0}, {768,0}, {832,0}, {896,0}, {960,0}, {1024,0}, {1088,0}, {1152,0},
@@ -93,6 +89,13 @@ int main(void)
         {448,660}, {512,660}, {576,660}, {704,660}, {768,660}, {832,660}, {896,660},
         {960,660}, {1024,660}, {1088,660}, {1216,180}, {1152,660}, {1216,660}
     };
+    
+    //------------------------------------------------------------------------------------
+    // Direções de movimento do pato e do caçador
+    bool pato_cima = false;
+    bool pato_baixo = false;
+    bool pato_direita = true;
+    bool pato_esquerda = false;
 
     //--------------------------------------------------------------------------------------
 
@@ -118,7 +121,7 @@ int main(void)
     Vector2 cacadorPos3 = {1152,600}; // Posição inicial do caçador3
     Vector2 cacadorPos4 = {128,60}; // Posição inicial do caçador4
     Vector2 cacadorPos5 = {200, screenHeight/2}; // Posição inicial do caçador5
-    Vector2 cacadorPos6 = {screenWidth/2, 530}; // Posição inicial do caçador6
+    Vector2 cacadorPos6 = {640, 530}; // Posição inicial do caçador6
     // Direção de movimento do caçador
     Vector2 cacadorDir =  { 1.0f, 0.0f };// Direção inicial do caçador1
     Vector2 cacadorDir2 = { 1.0f, 0.0f };// Direção inicial do caçador2
@@ -127,16 +130,18 @@ int main(void)
     Vector2 cacadorDir5 = { 1.0f, 0.0f };// Direção inicial do caçador5
     Vector2 cacadorDir6 = { 1.0f, 0.0f };// Direção inicial do caçador6
 
-    int framesCounter = 0; // Contador de quadros para mudar a direção do caçador
+    int framesCounter  = 0; // Contador de quadros para mudar a direção do caçador
     int framesCounter2 = 0;
     int framesCounter3 = 0;
     int framesCounter4 = 0;
     int framesCounter5 = 0;
     int framesCounter6 = 0;
 
+
     while (!WindowShouldClose())    // Loop principal do jogo
     { 
-    if(GameOver == 0){
+    
+        if(GameOver == 0){
 
         // Update
         //----------------------------------------------------------------------------------
@@ -453,7 +458,6 @@ int main(void)
                     cacadorPos4 = NewPosC4;
                 }
 
-        //----------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------  
         //cacador 5
 
@@ -541,7 +545,7 @@ int main(void)
         }
 
         // Atualiza a posição do caçador
-        Vector2 NewPosC6 = cacadorPos5;
+        Vector2 NewPosC6 = cacadorPos6;
 
         NewPosC6.x += cacadorDir6.x * 2.5f;
         NewPosC6.y += cacadorDir6.y * 2.5f;
@@ -616,19 +620,17 @@ int main(void)
                 CheckCollisionRecs(cacadorrec6, patorec)){  // Verificar colisão entre o caçador e o pato
                 GameOver = 1;// Jogo termina
                 PlaySound(sounddefeat); //Som de derrota
-            
+                NewGame = 0;
+
             }
+            if(WindowShouldClose){
+                WindowShouldClose;
+            }
+            
             else
             {
-                if (IsKeyPressed(KEY_ENTER)) {
-                    cord = (Vector2){64, 600};
-                    cacadorPos = (Vector2){1152, 60};
-                    GameOver = 0;
-                    Score = 0;
-                    ovos_coletados = 0;
-                    
-                    // Reinicializar outras variáveis necessárias
-                
+                if (IsKeyPressed(KEY_R)) {
+                    NewGame = 1;
                     } 
             }
     }
@@ -669,14 +671,21 @@ int main(void)
         else if(GameOver == 2){
             ClearBackground(BLACK);
             DrawTexture(victory, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
-            DrawText("Press ENTER to Restart", screenWidth/2 - MeasureText("Press ENTER to Restart", 20)/2, screenHeight/2 + 40, 20, GREEN);
+            DrawText("Press R to Restart", screenWidth/2 - MeasureText("Press R to Restart", 20)/2, screenHeight/2 + 40, 20, GREEN);
         }
     
         else{
             ClearBackground(BLACK);
             DrawTexture(defeat, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, RED);
             DrawTexture(reiniciar, screenWidth/2 - reiniciar.width/2, 450, RED);
-            
+                if(IsKeyPressed(KEY_R)){
+                    cord = (Vector2){64, 600};
+                    cacadorPos = (Vector2){1152, 60};
+                    GameOver = 0;
+                    Score = 0;
+                    ovos_coletados = 0;
+                    NewGame = 1;
+                }
         }
 
         EndDrawing();
@@ -699,8 +708,8 @@ int main(void)
     CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL
     //--------------------------------------------------------------------------------------
-    
-    
+        }
+    }
     return 0;
 
 }
