@@ -678,7 +678,7 @@ int main(void)
         else if(ovos_coletados == NUM_OVOS){
             ClearBackground(BLACK);
             DrawTexture(victory, screenWidth/2 - defeat.width/2, screenHeight/2 - defeat.height/2, WHITE);
-            DrawText("Press R to Restart", screenWidth/2 - MeasureText("Press R to Restart", 20)/2, screenHeight/2 + 40, 30, GREEN);
+            DrawText("Press R to Restart", screenWidth/2 - MeasureText("Press R to Restart", 20)/2, screenHeight/2 + 40, 40, GREEN);
                 if(IsKeyPressed(KEY_R)){
                     cord = (Vector2){64, 600};// Posição inicial do pato
                     cacadorPos = (Vector2){1152,60}; // Posição inicial do caçador1
