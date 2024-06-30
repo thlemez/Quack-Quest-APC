@@ -1,5 +1,4 @@
 #include "include/raylib.h"
-#include "include/lemes.h"
 #include <stdlib.h> // para numeros aleatorios
 
 #define NUM_PEDRASM2 109
