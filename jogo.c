@@ -616,7 +616,7 @@ int main(void)
         
         if (ovos_coletados == NUM_OVOS) {
             GameOver = 2;
-            StopSound;
+            UnloadSound(musica);
             PlaySound(soundwin); // usar audio da vitoria
         }
             //----------------------------------------------------------------------------------
@@ -629,10 +629,8 @@ int main(void)
                 CheckCollisionRecs(cacadorrec5, patorec) ||
                 CheckCollisionRecs(cacadorrec6, patorec)){  // Verificar colisão entre os caçadores e o pato
                 GameOver = 1;// Jogo termina
-                StopSound(musica);
+                UnloadSound(musica);
                 PlaySound(sounddefeat); //Som de derrota
-                
-
             }
             
             else
@@ -653,9 +651,9 @@ int main(void)
         if(GameOver == 0){ // Se o jogo está ativo, desenhe normalmente
             DrawTextureEx(pato, cord, 0.0, 0.05, WHITE); //Desenhar o pato
 
-            DrawTextureEx(arqueiro, cacadorPos, 0.0, 0.1, WHITE); // desenha caçador1
+            DrawTextureEx(arqueiro, cacadorPos, 0.0, 0.13, WHITE); // desenha caçador1
             DrawTextureEx(cacador, cacadorPos2, 0.0, 0.05, WHITE);// desenha caçador2
-            DrawTextureEx(arqueiro, cacadorPos3, 0.0, 0.1, WHITE);// desenha caçador3
+            DrawTextureEx(arqueiro, cacadorPos3, 0.0, 0.13, WHITE);// desenha caçador3
             DrawTextureEx(cacador, cacadorPos4, 0.0, 0.05, WHITE);// desenha caçador4
             DrawTextureEx(cacador, cacadorPos5, 0.0, 0.05, WHITE);// desenha caçador5
             DrawTextureEx(cacador, cacadorPos6, 0.0, 0.05, WHITE);// desenha caçador6
@@ -695,7 +693,9 @@ int main(void)
                     }//restart as variaves pra iniciar um novo jogo
                     GameOver = 0;//restart as variaves pra iniciar um novo jogo
                     Score = 0;//restart as variaves pra iniciar um novo jogo
-                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo                      
+                    ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo 
+                    LoadSound("audio/musica.mp3");  
+                    PlaySound(musica);                   
                 }
         }
         // Caso derrota imprime imagem de derrota e aparece a opção de reiniciar
@@ -718,7 +718,8 @@ int main(void)
                     GameOver = 0;//restart as variaves pra iniciar um novo jogo
                     Score = 0;//restart as variaves pra iniciar um novo jogo
                     ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo
-                    
+                    LoadSound("audio/musica.mp3");
+                    PlaySound(musica);
                 }
         }
                 // Se pressionar Q, fecha o jogo
