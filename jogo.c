@@ -243,8 +243,8 @@ int main(void)
         // Atualiza a posição do caçador
         Vector2 NewPosC1 = cacadorPos;
 
-        NewPosC1.x += cacadorDir.x * 2.5f;
-        NewPosC1.y += cacadorDir.y * 2.5f;
+        NewPosC1.x += cacadorDir.x * 3.5f;
+        NewPosC1.y += cacadorDir.y * 3.5f;
 
         // Verificar limites da janela para o caçador (teleporte)
         if (NewPosC1.x > screenWidth + 50) NewPosC1.x = 0;
@@ -366,8 +366,8 @@ int main(void)
         // Atualiza a posição do caçador
         Vector2 NewPosC3 = cacadorPos3;
 
-        NewPosC3.x += cacadorDir3.x * 2.5f;
-        NewPosC3.y += cacadorDir3.y * 2.5f;
+        NewPosC3.x += cacadorDir3.x * 3.5f;
+        NewPosC3.y += cacadorDir3.y * 3.5f;
 
         // Verificar limites da janela para o caçador (teleporte)
         if (NewPosC3.x > screenWidth + 50) NewPosC3.x = 0;
