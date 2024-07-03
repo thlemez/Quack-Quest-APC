@@ -695,7 +695,11 @@ int main(void)
                     Score = 0;//restart as variaves pra iniciar um novo jogo
                     ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo 
                     LoadSound("audio/musica.mp3");  
-                    PlaySound(musica);                   
+                    PlaySound(musica);             
+                    if(IsKeyPressed(KEY_Q)){
+                    CloseAudioDevice();
+                    CloseWindow();
+                }     
                 }
         }
         // Caso derrota imprime imagem de derrota e aparece a opção de reiniciar
@@ -720,10 +724,15 @@ int main(void)
                     ovos_coletados = 0;//restart as variaves pra iniciar um novo jogo
                     LoadSound("audio/musica.mp3");
                     PlaySound(musica);
+                    if(IsKeyPressed(KEY_Q)){
+                    CloseAudioDevice();
+                    CloseWindow();
+                }
                 }
         }
                 // Se pressionar Q, fecha o jogo
                 if(IsKeyPressed(KEY_Q)){
+                    CloseAudioDevice();
                     CloseWindow();
                 }
 
