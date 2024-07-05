@@ -614,7 +614,7 @@ int main(void)
         // Checar por vitória
         
         if (ovos_coletados == NUM_OVOS) {
-            GameOver = 2;
+            GameOver = 2; 
             UnloadSound(musica);
             PlaySound(soundwin); // usar audio da vitoria
         }
