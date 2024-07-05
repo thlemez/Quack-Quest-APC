@@ -7,7 +7,6 @@
 #define pedrawidth 40
 #define pedraheight 40
 #define NUM_OVOS 54
-#define MAX_FASES 3
 #define ovoHeight 20
 #define ovoWidth 20
 #define OvoScale 0.03f
