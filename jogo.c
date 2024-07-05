@@ -736,7 +736,7 @@ int main(void)
                 }
 
                 if (!IsSoundPlaying(musica)) {
-                  PlaySound(musica);
+                PlaySound(musica);
                 }
 
         EndDrawing();
