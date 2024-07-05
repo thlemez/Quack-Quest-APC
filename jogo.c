@@ -174,9 +174,9 @@ int main(void)
         else if (pato_baixo) NewPos1.y += 1.2f;
 
         // Verificar limites da janela (teleporte)
-        if (NewPos1.x > screenWidth + 50) NewPos1.x = 0;
+        if (NewPos1.x > screenWidth + 50) NewPos1.x = -40;
         else if (NewPos1.x < -50) NewPos1.x = screenWidth;
-        if (NewPos1.y > screenHeight + 50) NewPos1.y = 0;
+        if (NewPos1.y > screenHeight + 50) NewPos1.y = -40;
         else if (NewPos1.y < -50) NewPos1.y = screenHeight;
 
         //----------------------------------------------------------------------------------
