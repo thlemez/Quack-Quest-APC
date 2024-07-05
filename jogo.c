@@ -757,11 +757,10 @@ int main(void)
     UnloadSound(soundwin);
     UnloadSound(musica);
     UnloadTexture(arqueiro);
-
+    }
     CloseAudioDevice();
     CloseWindow();        // Fechar janela e contexto OpenGL
     //--------------------------------------------------------------------------------------
-        }
     }
     return 0;
 
